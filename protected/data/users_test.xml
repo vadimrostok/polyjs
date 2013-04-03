@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- sqlite-manager XML Dump
+- version 0.7.1
+- http://sqlite-manager.googlecode.com
+-
+- Generation Time: Thu, 28 Mar 2013 21:42:54 GMT
+- SQLite version: 3.7.14.1
+-->
+
+<!-- Database: flekr.db -->
+<sm_xml_export version="2.0">
+  <database name="flekr.db">
+    <table name="users_test">
+      <column name="id" type="1">1</column>
+      <column name="name" type="3">meee</column>
+    </table>
+    <table name="users_test">
+      <column name="id" type="1">2</column>
+      <column name="name" type="3">sheee</column>
+    </table>
+  </database>
+</sm_xml_export>

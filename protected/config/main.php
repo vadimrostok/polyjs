@@ -9,13 +9,17 @@ return array(
 	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name' =>'Flekr',
 
+	'defaultController' => 'front',
+
 	// preloading 'log' component
 	'preload'=>array('log'),
 
 	// autoloading model and component classes
 	'import' => array(
+		'application.models.base.*',
 		'application.models.*',
 		'application.components.*',
+		'application.helpers.*',
 	),
 
 	'modules' => array(
@@ -36,6 +40,10 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin' => true,
 		),
+		'kohanaImageObject' => array(
+			'class' => 'application.extensions.image.CImageComponent',
+			'driver' => 'ImageMagick',
+        ),
 		// uncomment the following to enable URLs in path-format
 		'urlManager' => array(
 			'urlFormat' => 'path',
@@ -51,7 +59,7 @@ return array(
 		),
 		'errorHandler' => array(
 			// use 'site/error' action to display errors
-			'errorAction' => 'site/error',
+			'errorAction' => 'front/error',
 		),
 		'log' => array(
 			'class' => 'CLogRouter',
