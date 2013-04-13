@@ -35,7 +35,10 @@ class BackendController extends Controller
 
 	public function actionIndex()
 	{
-		$this->render('index');
+		$params = [
+			'albums' => Album::seizeFullData(/*with pictures?yeeeeees*/)
+		];
+		$this->render('index', $params);
 	}
 
 	public function actionAuth()

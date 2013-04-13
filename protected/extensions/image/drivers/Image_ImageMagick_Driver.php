@@ -80,7 +80,7 @@ class Image_ImageMagick_Driver extends Image_Driver {
 			// Use convert to change the image into its final version. This is
 			// done to allow the file type to change correctly, and to handle
 			// the quality conversion in the most effective way possible.
-			if ($error = exec(escapeshellcmd($this->dir.'convert'.$this->ext).' -quality '.$quality.'% '.$this->cmd_image.' '.$this->new_image))
+			if ($error = exec('"' . $this->dir.'convert'.$this->ext . '" -quality '.$quality.'% '.$this->cmd_image.' '.$this->new_image))
 			{
 				$this->errors[] = $error;
 			}
@@ -165,7 +165,7 @@ class Image_ImageMagick_Driver extends Image_Driver {
 		}
 
 		// Use "convert" to change the width and height
-		if ($error = exec(escapeshellcmd($this->dir.'convert'.$this->ext).' -resize '.$dim.' '.$this->cmd_image.' '.$this->cmd_image))
+		if ($error = exec('"' . $this->dir.'convert'.$this->ext . '" -resize ' . $dim . ' ' . $this->cmd_image . ' ' . $this->cmd_image))
 		{
 			$this->errors[] = $error;
 			return FALSE;

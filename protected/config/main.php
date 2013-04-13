@@ -42,13 +42,21 @@ return array(
 		),
 		'kohanaImageObject' => array(
 			'class' => 'application.extensions.image.CImageComponent',
-			'driver' => 'ImageMagick',
+			'driver' => IMAGE_DRIVER,
+			'params' => defined(IMAGE_DRIVER_DIRECTORY)? false: array('directory' => IMAGE_DRIVER_DIRECTORY)
         ),
 		// uncomment the following to enable URLs in path-format
 		'urlManager' => array(
 			'urlFormat' => 'path',
 			'showScriptName' => false,
 			'rules' => array(
+				// REST patterns
+				array('rest/list', 		'pattern' => 'rest/<model:\w+>', 			'verb' => 'GET'),
+				array('rest/view', 		'pattern' => 'rest/<model:\w+>/<id:\d+>', 	'verb' => 'GET'),
+				array('rest/update', 	'pattern' => 'rest/<model:\w+>/<id:\d+>', 	'verb' => 'PUT'),
+				array('rest/delete', 	'pattern' => 'rest/<model:\w+>/<id:\d+>', 	'verb' => 'DELETE'),
+				array('rest/create', 	'pattern' => 'rest/<model:\w+>', 			'verb' => 'POST'),
+				//other
 				'<controller:\w+>/<id:\d+>' => '<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -56,6 +64,8 @@ return array(
 		),
 		'db' => array(
 			'connectionString' => 'sqlite:' . dirname(__FILE__) . '/../data/flekr.db',
+			'enableProfiling' => true,
+			'enableParamLogging' => true
 		),
 		'errorHandler' => array(
 			// use 'site/error' action to display errors
@@ -64,14 +74,25 @@ return array(
 		'log' => array(
 			'class' => 'CLogRouter',
 			'routes' => array(
-				array(
+				/*array(
 					'class' => 'CFileLogRoute',
 					'levels' => 'error, warning',
 				),
 				array(
 					'class'=>'CWebLogRoute',
-				),
+				),*/
+				'db' => array(
+					'class' => 'CWebLogRoute',
+					'categories' => 'system.db.CDbCommand',
+					'showInFireBug' => true
+				)
 			),
+		),
+		'clientScript'=>array(
+			'scriptMap'=>array(
+				'jquery.js'=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+				'jquery.min.js'=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+			)
 		),
 	),
 

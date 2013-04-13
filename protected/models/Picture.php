@@ -1,6 +1,8 @@
 <?php
 class Picture extends CActiveRecord
 {
+	use restApi;
+
 	//объект класса CUploadedFile
 	public $image;
 	//объект класса http://www.yiiframework.com/extension/image
@@ -91,6 +93,7 @@ class Picture extends CActiveRecord
 			$this->savePicturePreview(200);
 			$this->savePicturePreview(100);
 		}
+		$this->refresh();
 	}
 	
 	/**
@@ -109,5 +112,15 @@ class Picture extends CActiveRecord
 		$pathToAlbum = Yii::getPathOfAlias('webroot') . AlbumPictures::SAVEDIR . "/$albumId/";
 		$this->kohanaImageObject->save(Yii::app()->controller->relesePath("$pathToAlbum$wSide$filename"));
 		return "$pathToAlbum$wSide$filename";
+	}
+
+	public static function getPicturesByAlbumId($albumId = 0)
+	{
+		if($albumId > 0) {
+			$albums = self::model()->findAll('album_id=' . (int)$albumId);
+		} else {
+			$albums = self::model()->findAll();
+		}
+		return $albums;
 	}
 }

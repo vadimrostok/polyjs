@@ -15,6 +15,13 @@ class Controller extends CController
 	public function init()
 	{
 		parent::init();
+		
+		Yii::app()->getClientScript()->registerCoreScript('jquery');
+		//underscore
+		Yii::app()->getClientScript()->registerScriptFile('//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
+		//backbone
+		Yii::app()->getClientScript()->registerScriptFile('//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js');
+
 		if(!isset($_SESSION)) {
 			session_start();
 		}
@@ -35,7 +42,8 @@ class Controller extends CController
 	}
 
 	public static function relesePath($fullPath) {
-		$pathToFile = pathinfo($fullPath)['dirname'];
+		$pathToFile = pathinfo($fullPath);
+		$pathToFile = $pathToFile['dirname'];
 		if(!is_dir($pathToFile)) {
 			mkdir($pathToFile, 0755, true);
 		}

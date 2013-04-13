@@ -1,6 +1,8 @@
 <?php
 class Album extends CActiveRecord
 {
+	use restApi;
+
 	public $id;
 	public $title;
 	public $status_id;
@@ -29,6 +31,7 @@ class Album extends CActiveRecord
 	{
 		return array(
 			'status' => array(self::BELONGS_TO, 'Statuses', 'status_id'),
+			'pictures' => array(self::HAS_MANY, 'Picture', 'album_id'),
 		);
 	}
 
@@ -42,5 +45,46 @@ class Album extends CActiveRecord
 		} else {
 			return false;
 		}
+	}
+
+	protected function afterSave()
+	{
+		parent::afterSave();
+		$this->refresh();
+	}	
+
+	//For JSON representation
+	public static function seizeFullData()
+	{
+		$db = Yii::app()->db;
+		$selectAlbumsSql = '
+			SELECT
+				`albums`.*
+			FROM
+				`albums`
+			ORDER BY
+				`albums`.`created_at` DESC
+		';
+		$albums = $db->createCommand($selectAlbumsSql)->queryAll();
+		$selectPicturesSql = '
+			SELECT
+				`pictures`.*
+			FROM
+				`pictures`
+		';
+		$picturesByAlbumId = array();
+		$pictures = $db->createCommand($selectPicturesSql)->queryAll();
+		foreach($pictures as $picture) {
+			if(!isset($picturesByAlbumId[$picture['album_id']])) {
+				$picturesByAlbumId[$picture['album_id']] = array();
+			}
+			$picturesByAlbumId[$picture['album_id']][] = $picture;
+		}
+		foreach($albums as $key => $album) {
+			$albums[$key]['pictures'] = isset($picturesByAlbumId[$key])? 
+				$picturesByAlbumId[$key]
+				: array();
+		}
+		return $albums;
 	}
 }

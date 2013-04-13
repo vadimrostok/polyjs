@@ -9,22 +9,10 @@
 	    
 	    <link href="<?=Yii::app()->request->baseUrl ?>/js/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		
-		<script src="<?=Yii::app()->request->baseUrl ?>/js/jquery.js"></script>
 		<script src="<?=Yii::app()->request->baseUrl ?>/js/bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<div class="container" id="page">
-			<div class="container-fluid">
-				<div class="row-fluid">
-					<div class="span2">
-					<!--Sidebar content-->
-					</div>
-					<div class="span10">
-						<h1>Hello, world!</h1>
-					</div>
-				</div>
-			</div>
-			
+		<div class="container" id="page">			
 			<?php echo $content; ?>
 		</div>
 		<div id="footer">
