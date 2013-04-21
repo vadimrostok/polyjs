@@ -27,6 +27,12 @@ class RestController extends Controller
 			case 'picture':
 				$data = Picture::restList();
 				break;
+			case 'albumsWithPictures':
+				restApi::releseResponse(
+					200,
+					restApi::prepareResponse(Album::seizeFullData())
+				);
+				break;
 			default:
 				$errText = sprintf('Mode list is not implemented for model %s', $model);
 				restApi::releseResponse(
@@ -57,6 +63,13 @@ class RestController extends Controller
 
 	public function actionCreate($model)
 	{
+		if(Yii::app()->user->isGuest || !Yii::app()->user->isAdmin) {
+			$errText = 'Authentication Required';
+				restApi::releseResponse(
+					403, 
+					CJSON::encode(array('errorText' => $errText))
+				);
+		}
 		if(count($_POST) > 0) {
 			$post_vars = $_POST;
 		} else {

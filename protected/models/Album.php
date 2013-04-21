@@ -81,8 +81,8 @@ class Album extends CActiveRecord
 			$picturesByAlbumId[$picture['album_id']][] = $picture;
 		}
 		foreach($albums as $key => $album) {
-			$albums[$key]['pictures'] = isset($picturesByAlbumId[$key])? 
-				$picturesByAlbumId[$key]
+			$albums[$key]['pictures'] = isset($picturesByAlbumId[$album['id']])? 
+				$picturesByAlbumId[$album['id']]
 				: array();
 		}
 		return $albums;

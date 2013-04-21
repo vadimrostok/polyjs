@@ -16,5 +16,5 @@ require_once($yii);
 $extendCWebApp = dirname(__FILE__) . '/extendCWebApp.php';
 require_once($extendCWebApp);
 
-$config = dirname(__FILE__) . '/protected/config/front.php';
-MyYii::createWebApplication($config)->runEnd('front');
+$config = dirname(__FILE__) . '/protected/config/back.php';
+MyYii::createWebApplication($config)->runEnd('back');
