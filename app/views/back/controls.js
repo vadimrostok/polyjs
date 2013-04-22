@@ -1,10 +1,10 @@
 define([
-		//'models/album',
+		'boilerplate',
 		'collections/albumsCollection',
 		'views/album/album',
 		'libs/text!templates/back/controls.html'
 	], 
-	function(AlbumsList, album, controlsTmp){
+	function(boilerplate, AlbumsList, album, controlsTmp){
 		var controls = Backbone.View.extend({
 			id: 'adminControls',
 			/**

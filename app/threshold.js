@@ -20,16 +20,19 @@ requirejs.config({
 		bootstrap: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min'
 	},
 	shim: {
-		'backbone': {
+		backbone: {
 			deps: ['underscore', 'jquery'],
 			exports: 'Backbone'
+		},
+		underscore: {
+			exports: '_'
 		}
 	}
 });
 
 require(
-	['app'], 
+	['backEnd'], 
 	function(App){
-		//App.reset();
+		//
 	}
 );

@@ -1,7 +1,8 @@
 define([
+		'boilerplate',
 		'libs/text!templates/picture/picture_icon.html'
 	], 
-	function(pictureTmp){
+	function(boilerplate, pictureTmp) {
 		var picture = Backbone.View.extend({
 			attributes: {
 				'class': 'picture'

@@ -1,5 +1,7 @@
-define([], 
-	function(){
+define([
+		'boilerplate'
+	], 
+	function(boilerplate) {
 		var PictureModel = Backbone.Model.extend({
 			'urlRoot': URLS.base + '/rest/picture',
 			'defaults': {

@@ -1,7 +1,8 @@
 define([
+		'boilerplate',
 		'collections/picturesCollection',
 	], 
-	function(PicturesList){
+	function(boilerplate, PicturesList){
 		var AlbumModel = Backbone.Model.extend({
 			'urlRoot': URLS.base + '/rest/album',
 			'defaults': {

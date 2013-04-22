@@ -1,8 +1,9 @@
 define([
+		'boilerplate',
 		'views/picture/picture',
 		'libs/text!templates/album/album_icon.html'
 	], 
-	function(picture, albumTmp){
+	function(boilerplate, picture, albumTmp){
 		var album = Backbone.View.extend({
 			attributes: {
 				'class': 'album'

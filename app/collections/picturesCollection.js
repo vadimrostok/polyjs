@@ -1,7 +1,8 @@
 define([
+		'boilerplate',
 		'models/picture'
 	], 
-	function(Picture){
+	function(boilerplate, Picture){
 		var PicturesList = Backbone.Collection.extend({
 			model: Picture
 		});
