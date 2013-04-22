@@ -8,20 +8,20 @@
  * Backbone + jquery + unaerscore + может-что-то-еще.
  */
 define([
-		'jquery',
-		'underscore',
-		'backbone'
-	], 
-	function($, _, Backbone){
-		return {};
-	}
+        'jquery',
+        'underscore',
+        'backbone'
+    ], 
+    function($, _, Backbone){
+        return {};
+    }
 );
 /*
 define([
-		'boilerplate'
-	], 
-	function(boilerplate) {
-		
-	}
+        'boilerplate'
+    ], 
+    function(boilerplate) {
+        
+    }
 );
 */
