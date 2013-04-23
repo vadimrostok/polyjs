@@ -2,7 +2,7 @@ define([
         'boilerplate',
         'collections/albumsCollection',
         'views/album/album',
-        'libs/text!templates/back/controls.html'
+        'libs/require/text!templates/back/controls.html'
     ], 
     function(boilerplate, AlbumsList, album, controlsTmp){
         var controls = Backbone.View.extend({

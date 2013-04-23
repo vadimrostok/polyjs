@@ -9,7 +9,11 @@
         
         <link href="<?=Yii::app()->request->baseUrl ?>/app/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-        <script data-main="<?=Yii::app()->request->baseUrl ?>/app/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require.js"></script>
+        <script data-main="<?=Yii::app()->request->baseUrl ?>/app/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
+
+        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/libs/less/data/main.less?<?=microtime() ?>">
+        <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
+
     </head>
     <body>
         <div class="container" id="page">           

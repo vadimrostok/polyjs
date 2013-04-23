@@ -1,5 +1,6 @@
 var URLS = {
-    'base': '/flekr/back.php'
+    'base': '/flekr/back.php',
+    'picBase': '/flekr'
 };
 var data = {
     albums: {

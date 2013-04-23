@@ -1,6 +1,6 @@
 define([
         'boilerplate',
-        'libs/text!templates/picture/picture_icon.html'
+        'libs/require/text!templates/picture/picture_icon.html'
     ], 
     function(boilerplate, pictureTmp) {
         var picture = Backbone.View.extend({
@@ -11,6 +11,7 @@ define([
                 if(data.container) {
                     this.container = data.container;
                 }
+                this.model.set('src', URLS['picBase'] + this.model.get('src'));
                 this.model.on('change', this.render, this);
                 this.render();
             },
