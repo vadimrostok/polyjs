@@ -1,4 +1,4 @@
-./protected/data/flekr.db
-./protected/runtime
-./data
-./assets
+protected/data/flekr.db
+protected/runtime
+data
+assets
