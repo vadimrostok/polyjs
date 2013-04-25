@@ -8,13 +8,11 @@ define([
         appView = new appView();
         var app = new (function() {
             var debug = true;
-            var log = function(obj) {
+            this.log = function(obj) {
                 if(debug) {
                     console.log(obj);
                 }
             }
-
-            var t = this;
 
             this.reset = function(vithSync) {
                 if(vithSync) {

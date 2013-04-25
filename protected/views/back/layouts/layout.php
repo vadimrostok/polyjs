@@ -14,6 +14,18 @@
         <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/libs/less/data/main.less?<?=microtime() ?>">
         <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
 
+        <script type="text/javascript">
+            var URLS = {
+                'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
+                'picBase': '<?=Yii::app()->baseUrl ?>'
+            };
+            var setatusTexts = {
+            <?php foreach(Statuses::model()->findAll() as $status) : ?>
+                <?=$status->id ?>: '<?=$status->description ?>',
+            <?php endforeach ?>
+            };
+        </script>
+
     </head>
     <body>
         <div class="container" id="page">           

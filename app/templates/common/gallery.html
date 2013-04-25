@@ -1,0 +1,49 @@
+<!-- подкладка фон -->
+<div class="bground-black"></div>
+<div class="scroll-wrapper">
+    <div class="gallery-background">
+        <!-- подкладка закрытия -->
+        <div class="closefield t-bground"></div>
+        <div class="gallery-box">
+            <div class="gallery-viewport">
+                <div class="picture-viewport">
+                    <div class="goleft">
+                        <!-- подкладка мешающая выделению текста -->
+                        <div class="no-select-pad"></div>
+                        <div class="arrow">◁</div>
+                    </div>
+                    <div class="goright">
+                        <!-- подкладка мешающая выделению текста -->
+                        <div class="no-select-pad"></div>
+                        <div class="arrow">▷</div>
+                    </div>
+                </div>
+                <div class="hide">
+                    <hr />
+                </div>
+            </div>
+            <div class="cloud rolluped">
+                <span class="label label-inverse"><%= title %></span>
+                <hr/>
+                <div class="picture-info"></div>
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                        Редактировать
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="edit-comment">Редактировать комментарий</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" class="delete">Удалить</a></li>
+                    </ul>
+                </div>
+                <button class="btn-success btn show-comments">Комментарии</button>
+                <button class="btn-success btn rolldown">Свернуть</button>
+                <button class="btn-danger btn closefield">Закрыть</button>
+            </div>
+            <div class="cloud rolldowned hide">
+                <button class="btn-success btn rolldown">Меню</button>
+            </div>
+        </div>
+    </div>
+</div>

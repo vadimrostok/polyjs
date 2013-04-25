@@ -10,10 +10,14 @@ define([
             },
             'initialize': function(initData) {
                 if(initData.pictures) {
-                    this.set('pictures', new PicturesList(initData.pictures));
+                    var pictures = new PicturesList(initData.pictures);
+                    this.set('pictures', pictures);
+                    this.set('pictures_count', pictures.length);
                 } else {
-                    this.unset('pictures')
+                    this.unset('pictures');
+                    this.set('pictures_count', 0);
                 }
+                this.set('status_text', setatusTexts[this.get('status_id')]);
             },
             'validate': function(attrs) {
                 if(!_.isString(attrs.title)) {

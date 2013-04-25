@@ -23,7 +23,6 @@ define([
                 }});
             },
             onAlbumsLoaded: function() {
-                //deprecated наверно
                 this.render();
             },
             render: function() {

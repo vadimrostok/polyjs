@@ -1,7 +1,3 @@
-var URLS = {
-    'base': '/flekr/back.php',
-    'picBase': '/flekr'
-};
 var data = {
     albums: {
         list: {},
@@ -18,12 +14,16 @@ requirejs.config({
         jquery: '//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min',
         underscore: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min',
         backbone: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min',
-        bootstrap: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min'
+        bootstrap: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min',
+        jqueryui: '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min'
     },
     shim: {
         backbone: {
             deps: ['underscore', 'jquery'],
             exports: 'Backbone'
+        },
+        bootstrap: {
+            deps: ['jquery']
         },
         underscore: {
             exports: '_'

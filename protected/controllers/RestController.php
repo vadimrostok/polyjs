@@ -112,7 +112,7 @@ class RestController extends Controller
         }
     }
 
-    public function actionDelete($model)
+    public function actionDelete($id, $model)
     {
         switch($model) {
             case 'album':

@@ -1,0 +1,25 @@
+<div class="bground closefield"></div>
+<div class="details-popup-box">
+    <div class="details-popup">
+        <h2 class="title"><%= title %></h2>
+        <table class="table table-striped">
+            <tbody>
+                <% _.each({
+                        'ID': id,
+                        'Количество изображений': pictures_count,
+                        'Дата и время создания': created_at,
+                        'Статус': status_text
+                    }, function(value, index) {
+                        %>
+                        <tr>
+                            <td><%= index %></td>
+                            <td><%= value %></td>
+                        </tr>
+                        <%
+                    })
+                %>
+            </tbody>
+        </table>
+        <button type="button" id="deleteAlbum" class="btn btn-danger">Удалить альбом</button>
+    </div>
+</div>
