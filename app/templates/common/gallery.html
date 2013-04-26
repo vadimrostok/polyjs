@@ -10,20 +10,22 @@
                     <div class="goleft">
                         <!-- подкладка мешающая выделению текста -->
                         <div class="no-select-pad"></div>
-                        <div class="arrow">◁</div>
+                        <div class="arrow"><!--◁-->☜</div>
                     </div>
                     <div class="goright">
                         <!-- подкладка мешающая выделению текста -->
                         <div class="no-select-pad"></div>
-                        <div class="arrow">▷</div>
+                        <div class="arrow"><!--▷-->☞</div>
                     </div>
+                    <div class="picture-wrapper"></div>
                 </div>
                 <div class="hide">
                     <hr />
                 </div>
             </div>
             <div class="cloud rolluped">
-                <span class="label label-inverse"><%= title %></span>
+                <span class="label">Альбом:</span>
+                <span class="label label-info"><%= title %></span>
                 <hr/>
                 <div class="picture-info"></div>
                 <div class="btn-group">
@@ -32,18 +34,22 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="edit-comment">Редактировать комментарий</a></li>
+                        <li><a href="#" class="edit-comment">Редактировать</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="delete">Удалить</a></li>
+                        <li><a href="#" class="delete">Удалить изображение</a></li>
                     </ul>
                 </div>
-                <button class="btn-success btn show-comments">Комментарии</button>
-                <button class="btn-success btn rolldown">Свернуть</button>
-                <button class="btn-danger btn closefield">Закрыть</button>
+                <button class="btn-success btn rolldown">Свернуть меню</button>
+                <button class="btn-danger btn closefield"><abbr title="Так же Вы можете кликнуть по темному фону или нажать клавишу Esc.">Закрыть</abbr></button>
             </div>
-            <div class="cloud rolldowned hide">
-                <button class="btn-success btn rolldown">Меню</button>
+            <div class="cloud rolldowned rolldowned-menu hide">
+                <button class="btn-primary btn rolldown">Меню</button>
+                <button class="btn-info btn show-comments">Комментарии</button>
             </div>
+            <!--
+            можно добавить :3
+            <div class="cloud rolldowned hide"></div>
+            -->
         </div>
     </div>
 </div>

@@ -1,9 +1,10 @@
 /**
- * при открытии галереи появляется и медленно расворяется менюшка внизу, чтоб было понятно, что при наведении она появится снова.
+ * сделать общую вьюшку "попап" (нужен удобный функционал выбора шаблона - содержимого попапа)
+ * и шаблоны для "попап" и "редактирование картинки"
  */
 define([
         'boilerplate',
-        'views/picture/picture_slide',
+        'views/picture/slide',
         'libs/require/text!templates/common/gallery.html',
         'libs/require/text!templates/common/pictureCloudInfo.html',
         'bootstrap'
@@ -19,7 +20,7 @@ define([
                 'click .goleft': 'prevPicture',
                 'click .show-comments': 'commentsToggle',
                 'click .rolldown': 'cloudRolldownToggle',
-                'click .edit-comment': 'showEditAuthorComment',
+                'click .edit-comment': 'showEditPicture',
                 'click .delete': 'deletePicture',
             },
             initialize: function(data) {
@@ -65,7 +66,7 @@ define([
                     }
                     var isRolldowned = window.sessionStorage.getItem('cloudrolldowned');
                     if(isRolldowned && isRolldowned == 'true') {
-                        $(this.el).find('.rolldowned').removeClass('hide');
+                        $(this.el).find('.rolldowned-menu').removeClass('hide');
                         $(this.el).find('.rolluped').addClass('hide');
                     }
                 }
@@ -163,8 +164,8 @@ define([
                 that.trigger('change:picture');
 
                 if(that.preloaded[that.selectedPictureModel.get('id')]) {
-                    that.preloaded[that.selectedPictureModel.get('id')].render();
-                    app.log('preloaded data used')
+                    that.selectedPictureView = that.preloaded[that.selectedPictureModel.get('id')];
+                    that.selectedPictureView.render();
                 } else {
                     that.selectedPictureView = new pictureSlideView({
                         model: that.selectedPictureModel, 
@@ -177,14 +178,14 @@ define([
             },
             cloudRolldownToggle: function() {
                 var isRolldowned = 'false';
-                if($(this.el).find('.rolldowned').is(':visible')) {
+                if($(this.el).find('.rolldowned-menu').is(':visible')) {
                     //развернуть
-                    $(this.el).find('.rolldowned').addClass('hide');
+                    $(this.el).find('.rolldowned-menu').addClass('hide');
                     $(this.el).find('.rolluped').removeClass('hide');
                 } else {
                     //свернуть
                     isRolldowned = 'true';
-                    $(this.el).find('.rolldowned').removeClass('hide');
+                    $(this.el).find('.rolldowned-menu').removeClass('hide');
                     $(this.el).find('.rolluped').addClass('hide');
                 }
                 if(window.sessionStorage) {
@@ -194,11 +195,15 @@ define([
             commentsToggle: function() {
 
             },
-            showEditAuthorComment: function() {
-
+            showEditPicture: function() {
+                var that = this;
+                require(['views/common/popup', 'views/picture/edit'], function(popupView, editPictureView) {
+                    var editPicture = new editPictureView({model: that.selectedPictureModel, view: that.selectedPictureView});
+                    var popup = new popupView({innerView: editPicture});
+                    popup.render();
+                });
             },
             deletePicture: function() {
-                this.selectedPictureModel.des
                 var that = this;
                 require(['models/confirm', 'views/common/confirm'], function(confirmModel, confirmView) {
                     var confirmData = new confirmModel({
@@ -217,6 +222,7 @@ define([
                             model.destroy({error: function() {
                                 alert('У Вас недостаточно прав для удаления альбома.');
                             }});
+                            data.albums.views[model.get('album_id')].render(/* don't append? -> */true);
                             
                         }
                     });

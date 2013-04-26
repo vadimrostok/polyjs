@@ -5,7 +5,7 @@ define([
     function(boilerplate, confirmTmp){
         var confirm = Backbone.View.extend({
             attributes: {
-                'class': 'confirm-box'
+                'class': 'confirm-wrapper'
             },
             events: {
                 'click .closefield': 'remove',

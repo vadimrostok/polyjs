@@ -3,8 +3,8 @@
 */
 define([
         'boilerplate',
-        'views/picture/picture_icon',
-        'libs/require/text!templates/album/album_icon.html'
+        'views/picture/icon',
+        'libs/require/text!templates/album/icon.html'
     ], 
     function(boilerplate, picture, albumTmp){
         var album = Backbone.View.extend({
@@ -28,9 +28,9 @@ define([
                 //this.model.on('change', this.render, this);
                 this.render();
             },
-            render: function() {
+            render: function(dontAppend) {
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
-                if(this.container) {
+                if(!dontAppend && this.container) {
                     this.container.append(this.el);
                 }
                 data.pictures.views[this.model.get('id')] = {};

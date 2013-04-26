@@ -8,15 +8,11 @@ define([
                 'title': ''
             },
             'initialize': function(initData) {
-                this.set('client_path', URLS['picBase'] + this.get('client_path'));
-                this.setSizes();
+                this.fixModelm();
+                this.on('sync', this.fixModelm, this)
             },
             'validate': function(attrs) {
-                if(!_.isString(attrs.title)) {
-                    return {title: 'Имя изображения должно быть строкой'};
-                } else if(attrs.title.replace(' ', '').length < 3) {
-                    return {title: 'Длина имени изображения должна быть не менее 3-х символов'};
-                }
+                //
             },
             setSizes: function() {
                 var win_width = $(window).width();
@@ -45,6 +41,10 @@ define([
                     }
                 });*/
                 this.set('prefix', prefix);
+            },
+            fixModelm: function() {
+                this.set('client_path', URLS['picBase'] + this.get('client_path'));
+                this.setSizes();
             }
         });
 

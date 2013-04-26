@@ -58,9 +58,12 @@ trait restApi
         }
     }
 
-    public static function restUpdate($id, $params)
+    public static function restUpdate($id, $params, $protected_attributes = array())
     {
         $model = self::model()->findByPk($id);
+        if(isset($model->protected_from_client_attributes)) {
+            $protected_attributes = $model->protected_from_client_attributes;
+        }
         if(!isset($model)) {
             self::releseResponse(
                 404,
@@ -71,10 +74,14 @@ trait restApi
         $updateList = array();
         foreach($params as $key => $value) {
             if($model->hasAttribute($key)) {
-                $model->$key = $value;
-                $updateList[] = $key;
+                if(!in_array($key, $protected_attributes) && $model->$key != $value) {
+                    $updateList[] = $key;
+                    $model->$key = $value;
+                }
             }
         }
+        //echo $model->file_info;exit;
+        //echo implode(',', $updateList);exit;
         if($model->update(implode(',', $updateList))) {
             self::releseResponse(
                 200,
@@ -111,15 +118,30 @@ trait restApi
         }
     }
 
-    public static function prepareResponse($data)
+    public static function prepareResponse($data, $json_attributes = array())
     {
         if(is_array($data)) {
             $rows = array();
-            foreach($data as $model) {
+            foreach($data as $key => $model) {
                 if(isset($model->attributes)) {
+                    if(isset($model->json_attributes)) {
+                        $json_attributes = $model->json_attributes;
+                    }
+                    if(count($json_attributes) > 0) {
+                        foreach($model->attributes as $key => $value) {
+                            if(in_array($key, $json_attributes)) {
+                                $model->attributes[$key] = CJSON::encode($value);
+                            }
+                        }
+                    }
                     $rows[] = $model->attributes;
                 } else {
-                    $rows[] = $model;
+                    if(in_array($key, $json_attributes)) {
+                        $rows[] = CJSON::encode($model);
+                    } else {
+                        $rows[] = $model;
+                    }
+                    
                 }
             }
             return CJSON::encode($rows);

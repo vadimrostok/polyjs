@@ -1,8 +1,10 @@
 <% if(comment && comment.length > 0) {
 	%>
-	<span class="label"><%= comment %></span>
+	<span class="label">Комментарий автора:</span>
+	<span class="label label-info"><%= comment %></span>
 	<hr/>
 	<%
 } %>
-<span class="label label-info">Дата создания: <%= created_at %></span>
+<span class="label">Дата создания:</span>
+<span class="label label-info"><%= created_at %></span>
 <hr/>

@@ -21,6 +21,9 @@ class Picture extends CActiveRecord
     public $comment;
     public $file_info;
 
+    public $protected_from_client_attributes = array('client_path', 'created_at', 'file_info');
+    public $json_attributes = array('file_info');
+
     //имя сохраненного файла
     public $filename;
 
@@ -72,6 +75,8 @@ class Picture extends CActiveRecord
                     $this->extension_id = PictureExtensions::getTypeId($this->kohanaImageObject->ext);
                 }
                 $this->status_id = Statuses::OK;
+            } else {
+                $this->file_info = CJSON::encode($this->file_info);
             }
             return true;
         } else {
@@ -97,6 +102,11 @@ class Picture extends CActiveRecord
             $this->savePicturePreview(100);
         }
         $this->refresh();
+    }
+
+    protected function afterFind() {
+        $this->file_info = CJSON::decode($this->file_info);
+        parent::afterFind();
     }
     
     /**
