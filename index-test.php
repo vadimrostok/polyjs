@@ -1,5 +1,7 @@
 <?php
 
+//usr/local/lib/php.ini 
+
 // remove the following lines when in production mode
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 // specify how many levels of call stack should be shown in each log message
@@ -14,5 +16,5 @@ require_once($yii);
 $extendCWebApp = dirname(__FILE__) . '/extendCWebApp.php';
 require_once($extendCWebApp);
 
-$config = dirname(__FILE__) . '/protected/config/back.php';
-MyYii::createWebApplication($config)->runEnd('back');
+$config = dirname(__FILE__) . '/protected/config/front.php';
+MyYii::createWebApplication($config)->runEnd('front');

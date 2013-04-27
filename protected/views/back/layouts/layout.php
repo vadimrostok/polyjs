@@ -9,10 +9,24 @@
         
         <link href="<?=Yii::app()->request->baseUrl ?>/app/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-        <script data-main="<?=Yii::app()->request->baseUrl ?>/app/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
-
         <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/libs/less/data/main.less?<?=microtime() ?>">
         <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
+
+        <?php if(defined('UNIT_TEST')) : ?>
+            <link rel="stylesheet" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/test/lib/jasmine/jasmine.css">
+            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/test/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
+            <style type="text/css">
+                #HTMLReporter {
+                    margin: 10px;
+                    background-color: #eeeeee !important;
+                }
+                body {
+                    background-color: #fff !important;
+                }
+            </style>
+        <?php else : ?>
+            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
+        <?php endif ?>
 
         <script type="text/javascript">
             var URLS = {

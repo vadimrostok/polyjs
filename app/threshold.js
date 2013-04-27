@@ -34,6 +34,6 @@ requirejs.config({
 require(
     ['backEnd'], 
     function(App){
-        //
+        App.mainView.on('load:albums', App.mainView.render);
     }
 );

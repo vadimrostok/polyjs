@@ -16,6 +16,9 @@ define([
              */
             initialize: function() {
                 this.on('load:albums', this.onAlbumsLoaded);
+                this.fetchAlbums();
+            },
+            fetchAlbums: function() {
                 data.albums.list = new AlbumsList();
                 var that = this;
                 data.albums.list.fetch({success: function() {
@@ -23,7 +26,8 @@ define([
                 }});
             },
             onAlbumsLoaded: function() {
-                this.render();
+                //render вызывается по событию load:albums, прописаоно это в threshold
+                //this.render();
             },
             render: function() {
                 this.$el.html(_.template(controlsTmp));
@@ -36,12 +40,16 @@ define([
                  */
                 $('#page').append(this.el);
 
+                this.renderAlbums();    
+            },
+            renderAlbums: function() {
                 data.albums.list.forEach(function(element, index) {
                     data.albums.views[element.get('id')] = 
                         new album({
                             model: element, 
                             container: this.$('.controls')
                         });
+                    data.albums.views[element.get('id')].render();
                 });
             }
         });

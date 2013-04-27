@@ -14,6 +14,8 @@ define([
                 }
             }
 
+            this.mainView = appView;
+
             this.reset = function(vithSync) {
                 if(vithSync) {
                     if(data.albums && data.albums.list) {

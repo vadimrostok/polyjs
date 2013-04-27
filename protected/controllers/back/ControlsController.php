@@ -37,7 +37,7 @@ class ControlsController extends Controller
     public function actionAdmin()
     {
         $params = [
-            'albums' => Album::seizeFullData(/*with pictures?yeeeeees*/)
+            'albums' => array()//Album::seizeFullData(/*with pictures?yeeeeees*/)
         ];
         $this->render('admin', $params);
     }

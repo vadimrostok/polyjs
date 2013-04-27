@@ -25,8 +25,6 @@ define([
                 } else {
                     $(this.el).attr('pictures_count', 0);
                 }
-                //this.model.on('change', this.render, this);
-                this.render();
             },
             render: function(dontAppend) {
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
