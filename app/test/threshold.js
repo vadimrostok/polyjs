@@ -7,7 +7,8 @@ var data = {
         //Модели картинок в данном случе
         //хранятся в модели альбома.
         views: {}
-    }
+    },
+    notifications: {}
 };
 requirejs.config({
 	baseUrl: 'app/',

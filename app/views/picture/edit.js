@@ -1,8 +1,9 @@
 define([
         'boilerplate',
+        'views/common/notification',
         'libs/require/text!templates/picture/edit.html'
     ], 
-    function(boilerplate, editTmp) {
+    function(boilerplate, notification, editTmp) {
         var editWin = Backbone.View.extend({
             attributes: {
                 'class': 'edit-win'
@@ -29,7 +30,7 @@ define([
                         if($(element).attr('value')) {
                             $(element).find('option[value=' + $(element).attr('value') + ']').attr('selected', 'selected');
                         }
-                    })
+                    });
                 }
             },
             saveData: function() {
@@ -37,7 +38,12 @@ define([
                 $(this.el).find('.model-field').each(function(index, element) {
                     that.model.set($(element).attr('field'), $(element).val());
                 });
-                this.model.save();
+                this.model.save({}, {
+                    success: function() {
+                        var ntf = new notification({modelAttrs: {text: 'Изменения сохранены успешно.', duration: 5000}});
+                        ntf.render();
+                    }
+                });
                 if(this.relatedPictureView) {
                     this.relatedPictureView.render();
                 }

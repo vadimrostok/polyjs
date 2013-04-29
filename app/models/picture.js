@@ -8,13 +8,17 @@ define([
                 'title': ''
             },
             'initialize': function(initData) {
-                this.fixModelm();
-                this.on('sync', this.fixModelm, this)
+                this.fixModels();
+                this.on('sync', this.fixModels, this);
             },
             'validate': function(attrs) {
                 //
             },
             setSizes: function() {
+                if(!this.get('file_info')) {
+                    this.set('prefix', '');
+                    return 1;
+                }
                 var win_width = $(window).width();
                 var win_height = $(window).height();
                 var pic_width = this.get('file_info').width;
@@ -42,7 +46,7 @@ define([
                 });*/
                 this.set('prefix', prefix);
             },
-            fixModelm: function() {
+            fixModels: function() {
                 this.set('client_path', URLS['picBase'] + this.get('client_path'));
                 this.setSizes();
             }

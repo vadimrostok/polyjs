@@ -1,6 +1,6 @@
 define([
         'boilerplate',
-        'collections/albumsCollection',
+        'collections/albums',
         'views/album/album',
         'libs/require/text!templates/back/controls.html'
     ], 

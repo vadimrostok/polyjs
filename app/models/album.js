@@ -1,6 +1,6 @@
 define([
         'boilerplate',
-        'collections/picturesCollection',
+        'collections/pictures',
     ], 
     function(boilerplate, PicturesList){
         var AlbumModel = Backbone.Model.extend({
@@ -10,7 +10,7 @@ define([
             },
             'initialize': function(initData) {
                 if(initData.pictures) {
-                    var pictures = new PicturesList(initData.pictures);
+                    var pictures = new PicturesList(initData.pictures, {add: function() {alert(1);}});
                     this.set('pictures', pictures);
                     this.set('pictures_count', pictures.length);
                 } else {

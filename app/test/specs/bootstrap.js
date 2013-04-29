@@ -1,6 +1,7 @@
 var paths = [
     'specs/views/back/controls',
-    'specs/views/common/notification'
+    'specs/views/common/notification',
+    'specs/views/album/album'
 ];
 define(paths, 
     function() {

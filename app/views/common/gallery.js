@@ -119,7 +119,7 @@ define([
                         tmpModel = picturesList.at(tmpIndex - i);
                     }
 
-                    if(!this.preloaded[tmpModel.get('id')]) {
+                    if(tmpModel && !this.preloaded[tmpModel.get('id')]) {
                         this.preloaded[tmpModel.get('id')] = new pictureSlideView({
                             model: tmpModel, 
                             container: this.containerForPicture
@@ -205,7 +205,7 @@ define([
             },
             deletePicture: function() {
                 var that = this;
-                require(['models/confirm', 'views/common/confirm'], function(confirmModel, confirmView) {
+                require(['models/confirm', 'views/common/confirm', 'views/common/notification'], function(confirmModel, confirmView, notification) {
                     var confirmData = new confirmModel({
                         'header': 'Вы уверены?',
                         'body': 'Вы сейчас собираетесь удалить фотографию. Возможно, она не так плоха, как Вам кажется?',
@@ -219,11 +219,18 @@ define([
                             //не получится т.к. при переходе используется можель которую мы собираемся удалять
                             var model = that.selectedPictureModel;
                             that.move(1);
-                            model.destroy({error: function() {
-                                alert('У Вас недостаточно прав для удаления альбома.');
-                            }});
-                            data.albums.views[model.get('album_id')].render(/* don't append? -> */true);
-                            
+                            model.destroy({
+                                error: function() {
+                                    var ntf = new notification({modelAttrs: {text: 'У Вас недостаточно прав для удаления этого изображения.'}});
+                                    ntf.render();
+                                },
+                                success: function() {
+                                    var ntf = new notification({modelAttrs: {text: 'Изображение удалено успешно', duration: 100000}});
+                                    ntf.render();
+                                    //перерисовываем альбом, удаленной картинки там уже не будет
+                                    data.albums.views[model.get('album_id')].render(/* don't append? -> */true);
+                                }
+                            });                            
                         }
                     });
                     var confirm = new confirmView({model: confirmData});

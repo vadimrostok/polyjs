@@ -10,9 +10,9 @@ define([
             events: {
                 'click .closefield': 'remove'
             },
-            initialize: function(data) {
-                if(data['innerView']) {
-                    this.innerView = data['innerView'];
+            initialize: function(initData) {
+                if(initData['innerView']) {
+                    this.innerView = initData['innerView'];
                 }
                 if(!this.model) {
                     this.model = new (Backbone.Model.extend({}));

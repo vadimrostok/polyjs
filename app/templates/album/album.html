@@ -1,0 +1,61 @@
+<div class="bground closefield hide"></div>
+<div class="album albumIcon">
+    <div class="album-title showDetails">
+        <%= title %>
+        <% if(app.is_admin) { %>
+            (id: <%= id %>)
+        <% } %>
+    </div>
+    <div class="album-menu-panel">
+        <h2><%= title %></h2>
+    </div>
+    <% if(comment && comment.length > 0) {
+        %>
+        <div class="album-menu-panel">
+            <article><%= comment %></article>
+        </div>
+        <%
+    } %>
+    <div class="album-menu-panel">
+        <table>
+            <tbody>
+                <tr>
+                    <%
+                    var adminParams = {
+                        'ID': id,
+                        'Статус': status_text
+                    }
+                    var params = {
+                        '- такое тут количество изображений': pictures_count,
+                        '- такая вот дата создания': created_at
+                    }
+                    if(app.is_admin) {
+                        params = _.extend(params, adminParams);
+                        %>
+                        <td rowspan="<%= Object.keys(params).length %>">
+                            <button class="btn btn-large padding10 btn-block btn-primary showEdit">Редактировать</button>
+                            <button class="btn btn-large padding10 btn-block btn-danger delete">Удалить</button>
+                        </td>
+                        <% 
+                    };
+                    _.each(params, function(value, index) {
+                            if(value) {
+                                %>
+                                    <td class="rightAlign padding2">
+                                        <span class="label label-info"><%= value %></span>
+                                    </td>
+                                    <td class="padding2">
+                                        <span class="label"><%= index %></span>
+                                    </td>
+                                </tr>
+                                <% if(index < Object.keys(params).length) { %>
+                                    <tr>
+                                <% }
+                            }
+                        })
+                    %>
+            </tbody>
+        </table>
+    </div>
+    <div class="previews"></div>
+</div>

@@ -8,7 +8,9 @@ define([
             var model = null;
         	var view = null;
             afterEach(function() {
-                view.remove();
+                if(view) {
+                    view.remove();
+                }
                 view = model = null;
             });
             it('должно рендерить в себе view, если в конструктор или render передан view', function() {
@@ -19,44 +21,40 @@ define([
                 expect($(view.el).find('#' + testView.id).length).toBeTruthy();
             });
         	it('должно отключаться через определенное время', function() {
+                jasmine.Clock.useMock();
+
                 model = new notificationModel({text: 'test'});
                 view = new notificationView({model: model});
                 view.render();
-
                 //default timeout = 1500
-	        	waitsFor(function() {
+                jasmine.Clock.tick(1501);
+
+                expect(view.isShowing).toBeFalsy();
+
+                /*waitsFor(function() {
                     return !view.isShowing;
                 }, 'пока  отображается оповещение', 1501);
                 runs(function() {
                     expect(view.isShowing).toBeFalsy();
-                });
-        	});
+                });*/
+            });
+            xit('должно быть красиво', function() {
+                model = new notificationModel({text: 'test', duration: 5000});
+                view = new notificationView({model: model});
+                view.render();
+                waitsFor(function() {
+                    return !view.isShowing;
+                }, 'Слишком долго смотрим. не красиво?', 5000)
+            });
+            xit('должно показывать несколько оповещений сразу', function() {
+                var models = [];
+                var views = [];
+                for(var i = 0; i < 10; i++) {
+                    models[i] = new notificationModel({text: i, duration: /*Math.random()*/(10 - i)*3000});
+                    views[i] = new notificationView({model: models[i]});
+                    views[i].render();
+                }
+            });
 		});
     }
 );
-var currentContent = 'logo';
-$(".flipPad a.viewSongList").click(function() {
-var that = this;
-var flipbox = $(that).parent().parent().find('.flipbox');
-$(flipbox).flip({
-        direction: 'lr',
-        color: '#fff',
-        content: function() {
-            if(currentContent == 'logo') {
-                $(flipbox).addClass("removeBkgrnd").html('<p>Here is the song list.</p>');
-            } else {
-                $(flipbox).removeClass("removeBkgrnd").html('');
-            }                
-        },
-        onEnd: function() {
-            if(currentContent == 'logo') {
-                currentContent = 'songList';
-                $(that).addClass("viewAlbumArt").html('View Album Art');
-            } else {
-                currentContent = 'logo';
-                $(that).removeClass("viewAlbumArt").html('View Song List');
-            }
-        }
-    })
-    return false;
-});

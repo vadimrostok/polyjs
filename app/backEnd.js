@@ -32,7 +32,7 @@ define([
             this.getData = function() {return data;};
         });
 
-        window.app = app;
+        window.app = _.extend(window.app, app);
 
         return app;
     }

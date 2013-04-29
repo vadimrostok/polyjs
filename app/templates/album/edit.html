@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <button type="button" class="close closefield">&times;</button>
+    <h3>Редактирование альбома</h3>
+</div>
+<div class="modal-body">
+    <form> 
+        <fieldset>
+            <span class="help-block">
+                Название:
+            </span>
+            <textarea class="model-field" field="title"><%= title %></textarea>
+            <span class="help-block">
+                Статус:
+            </span>
+            <select class="model-field" field="status_id" value="<%= status_id %>">
+                <option value="1">OK</option>
+                <option value="2">Ожидает модерации</option>
+                <option value="3">Бан</option>
+            </select>
+            <span class="help-block">
+                Комментарий автора:
+            </span>
+            <textarea class="model-field" field="comment"><%= comment %></textarea>
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn closefield">Отмена</a>
+    <a href="#" class="btn btn-primary save">Сохранить</a>
+</div>

@@ -10,18 +10,11 @@
 define([
         'jquery',
         'underscore',
-        'backbone'
+        'backbone',
+        'views/common/notification'
     ], 
-    function($, _, Backbone){
+    function($, _, Backbone, notification) {
+        window.notification = notification;
         return {};
     }
 );
-/*
-define([
-        'boilerplate'
-    ], 
-    function(boilerplate) {
-        
-    }
-);
-*/

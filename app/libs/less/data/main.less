@@ -6,8 +6,26 @@
 @grayLight:	#999;
 @grayLighter: #eee;
 
+@pictureBoxWidth: 100px;
+
 form input:focus, form select:focus {
 	outline: none;
+}
+
+@red: #bd362f;
+@yellow: #fbb450;
+
+.red-color {
+	background-color: @red;
+}
+.yellow-color {
+	background-color: @yellow;
+}
+.light-color {
+	background-color: @grayLighter;
+}
+.dead-color {
+	background-color: #333333;
 }
 
 .smallBoxBounds (@side: 100px) {
@@ -41,6 +59,12 @@ form input:focus, form select:focus {
 	border: @width dashed @color;
 }
 
+.dashed-border-style {
+	.fluorescence(100px, 0px, #fff);
+	.rounded-corners(5px);
+	.dashed;
+}
+
 .fullscreenfixed {
 	position: fixed;
 	width: 100%;
@@ -57,67 +81,137 @@ form input:focus, form select:focus {
 	background-color: fadeout(@color, 50%);
 }
 
-.album {
-	.smallMargin;
-	.rounded-corners;
-	.smallBox;
-	.dashed;
-	display: inline-block;
-	overflow: hidden;
-	background-color: @grayLighter;
-	float: left;
-	position: relative;
-	.album-title {
-		cursor: pointer;
-		font-family: @baseFontFamily;
-		position: absolute;
-		bottom: 0px;
-		margin: 0px 0px 0px -3px;
-		padding: 3px;
-		background-color: fadeout(@grayLighter, 20%);
-		color: darken(@blue, 20%);
-		text-shadow: 1px 0px #fff;
-
-		background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(224,224,224,0.44) 44%, rgba(229,229,229,1) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(44%,rgba(224,224,224,0.44)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* IE10+ */
-		background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
-
-		width: 100%;
-		&:hover {
-			background: fadeout(@blue, 20%) !important;
-			color: #fff;
-			text-shadow: 0px 0px 5px #fff;
-		};
-	}
-}
-
-.previews {
-	.picture {
-		.smallBox(94px);
-		.rounded-corners(3px);
-		background-color: @grayLight;
-		float: left;
-		display: table;
-		margin: 3px;
-		overflow: hidden;
-		.centerior {
-			display: table-cell;
-			text-align: center;
-			vertical-align: middle;
-			img {
-				cursor: pointer;
-				.smallBoxBounds(94px);
-				&:hover {
-					box-shadow: 0px 3px 0px 0px #fff, 0px -3px 0px 0px #fff;
+.album-wrapper {
+	.previews {
+		position: relative;
+		.pictureIcon {
+			.smallBox(94px);
+			.rounded-corners(3px);
+			background-color: @grayLight;
+			float: left;
+			display: table;
+			margin: 3px;
+			overflow: hidden;
+			.centerior {
+				display: table-cell;
+				text-align: center;
+				vertical-align: middle;
+				img {
+					cursor: pointer;
+					.smallBoxBounds(94px);
+					&:hover {
+						box-shadow: 0px 3px 0px 0px #fff, 0px -3px 0px 0px #fff;
+					}
+				}
+			}
+		}
+		.bigPictureIcon {
+			.pictureIcon;
+			.smallBox(194px);
+			.centerior {
+				img {
+					.smallBoxBounds(194px);
 				}
 			}
 		}
 	}
+	.albumIcon {
+		.smallMargin;
+		.rounded-corners;
+		.smallBox;
+		.dashed;
+		display: inline-block;
+		overflow: hidden;
+		/*background-color: @grayLighter;*/
+		float: left;
+		position: relative;
+		max-width: @pictureBoxWidth*2;
+		.no-select-block-pad {
+			width: 100%;
+			position:relative;
+			top:0;
+			left:0;
+			margin:0;
+			padding:0;
+		}
+		.album-title {
+			cursor: pointer;
+			font-family: @baseFontFamily;
+			position: absolute;
+			bottom: 0px;
+			margin: 0px 0px 0px -3px;
+			padding: 50% 3px 5px 3px;
+			background-color: fadeout(@grayLighter, 20%);
+			color: darken(@blue, 20%);
+			text-shadow: 1px 0px #fff;
+			width: 100%;
+			z-index: 5;
+
+			background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(224,224,224,0.44) 44%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(44%,rgba(224,224,224,0.44)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* IE10+ */
+			background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(224,224,224,0.44) 44%,rgba(229,229,229,1) 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+
+			&:hover {
+				color: #fff;
+				text-shadow: 0px 0px 5px #fff;
+				background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, @blue 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,@blue)); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,@blue 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,@blue 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,@blue 100%); /* IE10+ */
+				background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,@blue 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='@blue',GradientType=0 ); /* IE6-9 */
+			};
+		}
+		.album-menu-panel {
+			display: none;
+		}
+	}
+	.albumDetails {
+		.dashed-border-style;
+		position: absolute;
+		background-color: #fff;
+		max-width: @pictureBoxWidth*8 + 20;
+		z-index: 10;
+		padding-bottom: 10px;
+		left: 10%;
+		td {
+			vertical-align: top;
+			padding: 5px;
+		}
+		.album-menu-panel {
+			display: block;
+			border-bottom: 2px dashed #aaa;
+			padding: 5px;
+		}
+		.previews {
+			padding: 10px;
+		}
+	}
 }
+
+.min-width100 {
+	min-width: 100px;
+}
+
+.padding(@what) {
+	padding: @what !important;
+}
+.padding10 {
+	.padding(10px);
+}
+.padding2 {
+	.padding(2px);
+}
+
+.rightAlign {
+	text-align: right;
+}
+
 .closefield {
 	cursor: pointer;
 }
@@ -160,33 +254,14 @@ form input:focus, form select:focus {
 	width: @width;
 }
 
-.dashed-border-style {
-	.fluorescence(100px, 0px, #fff);
-	.rounded-corners(5px);
-	.dashed;
-}
-
-.details-box {
-	.center-background;
-	.details-popup-box {
-		.center-box;
-		.details-popup {
-			.center-content;
-			background-color: @grayLighter;
-			padding: 15px;
-			.dashed-border-style;
-		}
-	}
-}
-
 .popup-wrapper {
 	.center-background;
-	z-index: 7;
+	z-index: 57;
 	.popup-box {
 		.center-box;
-		z-index: 8;
+		z-index: 58;
 		.content {
-			z-index: 9;
+			z-index: 59;
 			background-color: @grayLighter;
 			padding: 0px;
 			.center-content;
@@ -196,14 +271,17 @@ form input:focus, form select:focus {
 }
 
 .confirm-wrapper {
-	.details-box;
-	z-index: 10;
+	.center-background;
+	z-index: 80;
 	.confirm-popup-box {
-		.details-popup-box;
-		z-index: 11;
+		.center-box;
+		z-index: 81;
 		.confirm-popup {
-			.details-popup;
-			z-index: 12;
+			.center-content;
+			.dashed-border-style;
+			background-color: @grayLighter;
+			padding: 15px;
+			z-index: 82;
 		}
 	}
 }
@@ -213,11 +291,20 @@ form input:focus, form select:focus {
 	position: relative;
 	z-index: 5;
 }
+.no-select-block-pad-parent {
+	position: relative;
+}
+.no-select-block-pad {
+	.fullscreenfixed;
+}
 
 .gallery {
+	.bground-black {
+		z-index: 20;
+	}
 	.scroll-wrapper {
 		.fullscreenfixed;
-		z-index: 2;
+		z-index: 20;
 		overflow: auto;
 		height: 100%;
 		.gallery-background {
@@ -308,19 +395,23 @@ form input:focus, form select:focus {
 	}
 }
 
-.notification-wrapper {
-	.center-background;
-	z-index: 17;
-	.notification-box {
-		.center-box;
-		z-index: 18;
-		.content {
-			z-index: 19;
-			background-color: #fff;
-			padding: 10px;
-			.fluorescence(20px, 0px, #fff);
-			.center-content;
-			.rounded-corners(10px);
-		}
+.notification {
+	background-color: #fff;
+	position: fixed;
+	top: 10%;
+	right: 10%;
+	z-index: 119;
+	padding: 0px;
+	.modal-header {
+		padding: 10px;
 	}
+	.modal-body {
+		padding: 10px;
+	}
+	.close {
+		margin-left: 10px;
+		margin-top: 1px;
+	}
+	.fluorescence(20px, 0px, #fff);
+	.dashed-border-style;
 }

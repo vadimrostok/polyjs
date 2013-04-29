@@ -2,7 +2,7 @@ define([
         'views/back/controls'
     ], 
     function(controlsView) {
-        describe("Представление controls", function() {
+        xdescribe("Представление controls", function() {
         	var view = new controlsView();
         	it('должно загрузить альбомы', function() {
 	        	waitsFor(function() {

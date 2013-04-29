@@ -29,14 +29,29 @@
         <?php endif ?>
 
         <script type="text/javascript">
+            var app = {
+                is_admin: true
+            };
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>'
             };
             var setatusTexts = {
-            <?php foreach(Statuses::model()->findAll() as $status) : ?>
-                <?=$status->id ?>: '<?=$status->description ?>',
-            <?php endforeach ?>
+                <?php foreach(Statuses::model()->findAll() as $status) : ?>
+                    <?=$status->id ?>: '<?=$status->description ?>',
+                <?php endforeach ?>
+            };
+            <?php 
+            $allStatusColorClasses = '';
+            ?>
+            var statusColorClasses = {
+                <?php foreach(Statuses::model()->findAll() as $status) : ?>
+                    <?=$status->id ?>: '<?=$status->color ?>-color',
+                    <?php 
+                    $allStatusColorClasses .= ' ' . $status->color;
+                    ?>
+                <?php endforeach ?>
+                all: '<?=$allStatusColorClasses ?>'
             };
         </script>
 

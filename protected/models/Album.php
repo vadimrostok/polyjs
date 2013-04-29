@@ -79,6 +79,8 @@ class Album extends CActiveRecord
                 `pictures`.*
             FROM
                 `pictures`
+            WHERE
+                `status_id`!=' . Statuses::RELATED_PARENT_DELETED . '
         ';
         $picturesByAlbumId = array();
         $pictures = $db->createCommand($selectPicturesSql)->queryAll();
@@ -91,6 +93,7 @@ class Album extends CActiveRecord
             $picturesByAlbumId[$picture['album_id']][] = $picture;
         }
         foreach($albums as $key => $album) {
+            $albums[$key]['created_at'] = date('d.m.y', strtotime($albums[$key]['created_at']));
             $albums[$key]['pictures'] = isset($picturesByAlbumId[$album['id']])? 
                 $picturesByAlbumId[$album['id']]
                 : array();

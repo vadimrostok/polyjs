@@ -5,7 +5,8 @@ define([
         var NotificationModel = Backbone.Model.extend({
             defaults: {
                 'title': 'Оповещение',
-                'duration': 1500
+                'duration': 1500,
+                'text': ''
             },
             'initialize': function() {
                 //

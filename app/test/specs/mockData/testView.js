@@ -12,7 +12,7 @@ define([
             },
             render: function(container, params) {
                 if(!params) {
-                    var params = {text: 'hello viewwww'};
+                    var params = {text: 'test view'};
                 }
                 this.$el.html(_.template(viewTmp, params));
                 if(this.container) {

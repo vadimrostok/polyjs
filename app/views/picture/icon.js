@@ -4,18 +4,20 @@ define([
     ], 
     function(boilerplate, pictureTmp) {
         var picture = Backbone.View.extend({
-            attributes: {
-                'class': 'picture'
-            },
             events: {
                 'click img': 'showPicture'
             },
             initialize: function(data) {
                 this.container = data.container;
-                //this.model.on('change', this.render, this);
-                this.render();
             },
-            render: function() {
+            render: function(useBigPreviews) {
+                if(useBigPreviews == true) {
+                    $(this.el).attr('class', 'picture bigPictureIcon');
+                    this.model.set('icon_prefix', '400_');
+                } else {
+                    $(this.el).attr('class', 'picture pictureIcon');
+                    this.model.set('icon_prefix', '100_');
+                }
                 $(this.el).html(_.template(pictureTmp, this.model.toJSON()));
                 this.container.append(this.el);
             },

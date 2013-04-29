@@ -4,16 +4,24 @@
 define([
         'boilerplate',
         'views/picture/icon',
-        'libs/require/text!templates/album/icon.html'
+        'libs/require/text!templates/album/album.html',
+        'bootstrap'
     ], 
     function(boilerplate, picture, albumTmp){
         var album = Backbone.View.extend({
+            sliderInterval: null,
+            previewPicturesCount: 10,
+            previewPicturesRendered: 0,
+            allPreviewPicturesRendered: false,
+            renderedOnce: false,
             attributes: {
-                'class': 'album'
+                'class': 'album-wrapper'
             },
             events: {
-                //'click .picture img': 'showPicture'
-                'click .showDetails': 'showAlbumDetails',
+                'click .showDetails': 'showDetails',
+                'click .showEdit': 'showEdit',
+                'click .delete': 'delete',
+                'click .close, .closefield': 'hideDetails'
             },
             initialize: function(data) {
                 if(data.container) {
@@ -26,31 +34,157 @@ define([
                     $(this.el).attr('pictures_count', 0);
                 }
             },
-            render: function(dontAppend) {
+            remove: function() {
+                clearInterval(this.sliderInterval);
+                this.renderedOnce = false;
+                $(this.el).remove();
+            },
+            render: function(reRenderPictures, detailsMode, useBigPreviews) {
+                var that = this;
+                if(useBigPreviews == true) {
+                    var previewHeight = 400;
+                } else {
+                    useBigPreviews = false;
+                    var previewHeight = 100;
+                }
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
-                if(!dontAppend && this.container) {
+                if(!this.renderedOnce && !reRenderPictures && this.container) {
                     this.container.append(this.el);
                 }
+                $(this.el).find('.album')
+                    .removeClass(statusColorClasses.all)
+                    .addClass(statusColorClasses[this.model.get('status_id')]);
+
                 data.pictures.views[this.model.get('id')] = {};
 
                 var pictures = this.model.get('pictures');
-                if(pictures) {
-                    for(var i = 0; i < 4; i++) {
+                if(detailsMode) {
+                    var showPicturesCount = pictures.length;
+                } else {
+                    var showPicturesCount = this.previewPicturesCount;
+                }
+                if(showPicturesCount >= pictures.length) {
+                    this.allPreviewPicturesRendered = true;
+                }
+                if(pictures && pictures.length > 0) {
+                    for(var i = 0; i < showPicturesCount; i++) {
                         if(pictures.at(i)) {
                             data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
                                 new picture({
                                     model: pictures.at(i), 
                                     container: this.$('.previews')
                                 });
+                            data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render(/*use big previews?no*/useBigPreviews);
+                            this.previewPicturesRendered++;
                         }
                     }
                 }
+                if(detailsMode) {
+                    this.showDetails();
+                }
+                this.renderedOnce = true;
+                $(this.el).find('.previews').css({height: (this.previewPicturesRendered/2>>0)*previewHeight  + 'px'});
+
+                this.setSlider();
             },
-            showAlbumDetails: function() {
-                var model = this.model;
+            setSlider: function() {
                 var that = this;
-                require(['views/album/details'], function(detailsView) {
-                    var details = new detailsView({model: model, albumView: that});
+                var top, height, pictureHeight;
+                var viewPortHeight = 200;
+                setTimeout(function() {
+                    that.sliderInterval = setInterval(function() {
+                        $(that.el).find('.previews').each(function(index, element) {
+                            if($(that).hasClass('albumDetails')) {
+                                return 1;
+                            }
+                            top = parseInt($(element).css('top')) || 0;
+                            pictureHeight = $(element).find('.picture').outerHeight();
+                            height = $(element).innerHeight();
+                            if(-top < height - viewPortHeight && height > $(element).parent().height()) {
+                                $(element).css({top: top - pictureHeight - 6 + 'px'});
+                            } else {
+                                $(element).css({top: '0px'});
+                            }
+                        });
+                    }, Math.random()*5000 + 5000);
+                }, Math.random()*5000);
+            },
+            unsetSlider: function() {
+                $(this.el).find('.previews').stop(true, true);
+                $(this.el).find('.previews').css({top: '0px'});
+                clearInterval(this.sliderInterval);
+            },
+            showDetails: function() {
+                var scrollTop = $(window).scrollTop() + 50;
+                $(this.el)
+                    .find('.album')
+                        .removeClass('albumIcon')
+                        .addClass('albumDetails')
+                        .css({top: scrollTop + 'px'})
+                    .find('.album-title').hide();
+                $(this.el).find('.bground').removeClass('hide');
+                if(!this.allPreviewPicturesRendered) {
+                    var pictures = this.model.get('pictures');
+                    if(pictures && pictures.length > 0) {
+                        for(var i = this.previewPicturesCount; i < pictures.length; i++) {
+                            if(pictures.at(i)) {
+                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
+                                    new picture({
+                                        model: pictures.at(i), 
+                                        container: this.$('.previews')
+                                    });
+                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render();
+                            }
+                        }
+                    }
+                    this.allPreviewPicturesRendered = true;
+                }
+                this.unsetSlider();
+            },
+            hideDetails: function() {
+                $(this.el)
+                    .find('.album')
+                        .removeClass('albumDetails')
+                        .addClass('albumIcon')
+                        .css({top: ''})
+                    .find('.album-title').show();
+                $(this.el).find('.bground').addClass('hide');
+                this.setSlider();
+            },
+            showEdit: function() { 
+                var that = this;
+                require(['views/common/popup', 'views/album/edit'], function(popupView, editAlbumView) {
+                    var editAlbum = new editAlbumView({model: that.model, view: that});
+                    var popup = new popupView({innerView: editAlbum});
+                    popup.render();
+                });
+            },
+            delete: function() {
+                var that = this;
+                require(['models/confirm', 'views/common/confirm', 'views/common/notification'], function(confirmModel, confirmView, notification) {
+                    var confirmData = new confirmModel({
+                        'header': 'Вы уверены?',
+                        'body': 'Вы сейчас собираетесь удалить целый альбом.',
+                        'negative_text': 'Ой, нет.',
+                        'positive_text': 'Да!',
+                        'negative': function() {
+                            //remove для confirm вызывается автоматически
+                        },
+                        'positive': function() {
+                            that.model.destroy({
+                                error: function() {
+                                    var ntf = new notification({modelAttrs: {text: 'У Вас недостаточно прав для удаления альбома.'}});
+                                    ntf.render();
+                                },
+                                success: function() {
+                                    var ntf = new notification({modelAttrs: {text: 'Альбом удален успешно.'}});
+                                    ntf.render();
+                                }
+                            });
+                            that.remove();
+                        }
+                    });
+                    var confirm = new confirmView({model: confirmData});
                 });
             }
         });
