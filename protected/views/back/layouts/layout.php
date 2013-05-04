@@ -53,11 +53,17 @@
                 <?php endforeach ?>
                 all: '<?=$allStatusColorClasses ?>'
             };
+            window.progressBar = function(prc) {
+                document.getElementById('mainProgressBar').style.width = prc + '%';
+            }
         </script>
 
     </head>
     <body>
-        <div class="container" id="page">           
+        <div class="container" id="page">
+            <div class="progress progress-striped active">
+                <div class="bar" id="mainProgressBar" style="width: 0%;"></div>
+            </div>
             <?php echo $content; ?>
         </div>
         <div id="footer">

@@ -4,11 +4,11 @@ define([
     ], 
     function(boilerplate, PicturesList){
         var AlbumModel = Backbone.Model.extend({
-            'urlRoot': URLS.base + '/rest/album',
-            'defaults': {
+            urlRoot: URLS.base + '/rest/album',
+            defaults: {
                 'title': ''
             },
-            'initialize': function(initData) {
+            initialize: function(initData) {
                 if(initData.pictures) {
                     var pictures = new PicturesList(initData.pictures, {add: function() {alert(1);}});
                     this.set('pictures', pictures);
@@ -19,11 +19,11 @@ define([
                 }
                 this.set('status_text', setatusTexts[this.get('status_id')]);
             },
-            'validate': function(attrs) {
+            validate: function(attrs) {
                 if(!_.isString(attrs.title)) {
-                    return {title: 'Название альбома должно быть строкой'};
+                    return {field: 'title', text: 'Название альбома должно быть строкой'};
                 } else if(attrs.title.replace(' ', '').length < 3) {
-                    return {title: 'Длина названия альбома должна быть не менее 3-х символов'};
+                    return {field: 'title', text: 'Длина названия альбома должна быть не менее 3-х символов'};
                 }
             }
         });

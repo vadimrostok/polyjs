@@ -33,6 +33,10 @@ define([
 
                 this.render();
             },
+            remove: function() {
+                $('body').css({'overflow': 'auto'});
+                $(this.el).remove();
+            },
             render: function() {
                 $(this.el).html(_.template(galleryTmp, this.model.toJSON()));
                 $('#page').append(this.el);
@@ -86,6 +90,8 @@ define([
                 this.selectedPictureView = this.preloaded[this.selectedPictureModel.get('id')];
                 this.selectedPictureView.render();
                 that.trigger('change:picture');
+
+                $('body').css({'overflow': 'hidden'});
             },
             processPreload: function() {
                 var picturesList = this.model.get('pictures');

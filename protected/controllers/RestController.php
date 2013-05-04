@@ -63,7 +63,7 @@ class RestController extends Controller
 
     public function actionCreate($model)
     {
-        if(Yii::app()->user->isGuest || !Yii::app()->user->isAdmin) {
+        if(Yii::app()->user->isGuest || !Yii::app()->user->isAdmin()) {
             $errText = 'Authentication Required';
                 restApi::releseResponse(
                     403, 

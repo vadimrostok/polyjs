@@ -7,4 +7,7 @@ class FrontWebUser extends CWebUser {
 		}
 		return false;
 	}
+	public function isAdmin() {
+		return false;
+	}
 }

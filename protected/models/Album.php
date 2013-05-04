@@ -70,6 +70,8 @@ class Album extends CActiveRecord
                 `albums`.*
             FROM
                 `albums`
+            WHERE 
+                `id`!=1
             ORDER BY
                 `albums`.`created_at` DESC
         ';

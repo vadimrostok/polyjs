@@ -9,6 +9,8 @@ define([
     ], 
     function(boilerplate, picture, albumTmp){
         var album = Backbone.View.extend({
+            previewsHeight: 0,
+            useBigPreviews: null,
             sliderInterval: null,
             previewPicturesCount: 10,
             previewPicturesRendered: 0,
@@ -21,9 +23,11 @@ define([
                 'click .showDetails': 'showDetails',
                 'click .showEdit': 'showEdit',
                 'click .delete': 'delete',
-                'click .close, .closefield': 'hideDetails'
+                'click .close, .closefield': 'hideDetails',
+                'change .files': 'handleFilesAdd'
             },
             initialize: function(data) {
+                data = data || {};
                 if(data.container) {
                     this.container = data.container;
                 }
@@ -40,12 +44,18 @@ define([
                 $(this.el).remove();
             },
             render: function(reRenderPictures, detailsMode, useBigPreviews) {
+                this.previewPicturesRendered = 0;
                 var that = this;
+                if(typeof useBigPreviews == 'undefined' && this.useBigPreviews) {
+                    useBigPreviews = this.useBigPreviews;
+                }
                 if(useBigPreviews == true) {
                     var previewHeight = 400;
+                    this.useBigPreviews = useBigPreviews;
                 } else {
                     useBigPreviews = false;
                     var previewHeight = 100;
+                    this.useBigPreviews = useBigPreviews;
                 }
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
                 if(!this.renderedOnce && !reRenderPictures && this.container) {
@@ -79,12 +89,14 @@ define([
                         }
                     }
                 }
+                this.previewsHeight = (this.previewPicturesRendered/2>>0)*previewHeight;
                 if(detailsMode) {
                     this.showDetails();
+                } else {
+                    $(this.el).find('.previews').css({height: this.previewsHeight + 'px'});
                 }
                 this.renderedOnce = true;
-                $(this.el).find('.previews').css({height: (this.previewPicturesRendered/2>>0)*previewHeight  + 'px'});
-
+                
                 this.setSlider();
             },
             setSlider: function() {
@@ -133,12 +145,13 @@ define([
                                         model: pictures.at(i), 
                                         container: this.$('.previews')
                                     });
-                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render();
+                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render(this.useBigPreviews);
                             }
                         }
                     }
                     this.allPreviewPicturesRendered = true;
                 }
+                $(this.el).find('.previews').css({'height': 'auto'});
                 this.unsetSlider();
             },
             hideDetails: function() {
@@ -149,6 +162,7 @@ define([
                         .css({top: ''})
                     .find('.album-title').show();
                 $(this.el).find('.bground').addClass('hide');
+                $(this.el).find('.previews').css({'height': this.previewsHeight + 'px'});
                 this.setSlider();
             },
             showEdit: function() { 
@@ -158,6 +172,12 @@ define([
                     var popup = new popupView({innerView: editAlbum});
                     popup.render();
                 });
+            },
+            handleFilesAdd: function() {
+                
+            },
+            uploadFiles: function() {
+                window.File && window.FileReader && window.FileList && window.Blob;
             },
             delete: function() {
                 var that = this;

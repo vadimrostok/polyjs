@@ -3,9 +3,11 @@ define([
         'views/back/controls'
     ],
     function(boilerplate, appView) {
-        //appView: загрузка данный и последующий
-        //рендеринг запускаются в конструкторе
+        //appView: загрузка данных и последующий
+        //рендеринг(по событию загрузки альбомов) запускаются в конструкторе
+
         appView = new appView();
+
         var app = new (function() {
             var debug = true;
             this.log = function(obj) {
