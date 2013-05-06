@@ -5,18 +5,43 @@ define([
     function(boilerplate, pictureTmp) {
         var picture = Backbone.View.extend({
             events: {
-                'click img': 'showPicture'
+                'click img': 'showPicture',
+                'click .closefield': 'remove'
             },
-            initialize: function(data) {
-                this.container = data.container;
+            initialize: function(initData) {
+                this.container = initData.container;
+                if(initData['parentView']) {
+                    this.parentView = initData['parentView'];
+                }
+            },
+            remove: function(e) {
+                if(e) {
+                    e.stopPropagation();
+                }
+                if(this.model.mode == 'upload-preview') {
+                    if($(this.el).parent().find('.picture').length == 1) {
+                        $(this.el).parent().parent().find('.upload').addClass('hide');
+                        this.parentView.clearInput();
+                    }
+                    this.model.trigger('remove:upload-preview');
+                }
+                $(this.el).remove();
             },
             render: function(useBigPreviews) {
+                window.el = this.el;
+                var prefix = '';
                 if(useBigPreviews == true) {
                     $(this.el).attr('class', 'picture bigPictureIcon');
-                    this.model.set('icon_prefix', '400_');
+                    prefix = '400_';
                 } else {
                     $(this.el).attr('class', 'picture pictureIcon');
-                    this.model.set('icon_prefix', '100_');
+                    prefix = '100_';
+                }
+                if(this.model.get('isLocal') != true) {
+                    this.model.set('icon_prefix', prefix);
+                } else {
+                    this.model.set('icon_prefix', '');
+                    $(this.el).addClass('local_preview');
                 }
                 $(this.el).html(_.template(pictureTmp, this.model.toJSON()));
                 this.container.append(this.el);
