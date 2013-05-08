@@ -3,11 +3,16 @@
 */
 define([
         'boilerplate',
+        'models/picture',
         'views/picture/icon',
         'libs/require/text!templates/album/album.html',
         'bootstrap'
     ], 
-    function(boilerplate, picture, albumTmp){
+    function(boilerplate, pictureModel, pictureView, albumTmp) {
+        if(!data.expandedAlbusViews) {
+            data.expandedAlbusViews = [];
+        }
+        window.de = data.expandedAlbusViews;
         var album = Backbone.View.extend({
             previewsHeight: 0,
             useBigPreviews: null,
@@ -24,7 +29,8 @@ define([
                 'click .showEdit': 'showEdit',
                 'click .delete': 'delete',
                 'click .close, .closefield': 'hideDetails',
-                'change .files': 'handleFilesAdd'
+                'change .files': 'handleFilesAdd',
+                'click .upload': function() {this.model.uploadPictures();}
             },
             initialize: function(data) {
                 data = data || {};
@@ -80,7 +86,7 @@ define([
                     for(var i = 0; i < showPicturesCount; i++) {
                         if(pictures.at(i)) {
                             data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
-                                new picture({
+                                new pictureView({
                                     model: pictures.at(i), 
                                     container: this.$('.previews')
                                 });
@@ -127,6 +133,11 @@ define([
                 clearInterval(this.sliderInterval);
             },
             showDetails: function() {
+                for(var i = 0; i < data.expandedAlbusViews.length; i++) {
+                    if(data.expandedAlbusViews[i]) {
+                        data.albums.views[data.expandedAlbusViews[i]].hideDetails();
+                    }
+                }
                 var scrollTop = $(window).scrollTop() + 50;
                 $(this.el)
                     .find('.album')
@@ -141,7 +152,7 @@ define([
                         for(var i = this.previewPicturesCount; i < pictures.length; i++) {
                             if(pictures.at(i)) {
                                 data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
-                                    new picture({
+                                    new pictureView({
                                         model: pictures.at(i), 
                                         container: this.$('.previews')
                                     });
@@ -153,8 +164,10 @@ define([
                 }
                 $(this.el).find('.previews').css({'height': 'auto'});
                 this.unsetSlider();
+                data.expandedAlbusViews.push(this.model.get('id'));
             },
             hideDetails: function() {
+                //this.model.clearToUploadFileList();
                 $(this.el)
                     .find('.album')
                         .removeClass('albumDetails')
@@ -164,6 +177,8 @@ define([
                 $(this.el).find('.bground').addClass('hide');
                 $(this.el).find('.previews').css({'height': this.previewsHeight + 'px'});
                 this.setSlider();
+                var index = _.indexOf(data.expandedAlbusViews, this.model.get('id'));
+                delete data.expandedAlbusViews[index];
             },
             showEdit: function() { 
                 var that = this;
@@ -173,11 +188,48 @@ define([
                     popup.render();
                 });
             },
-            handleFilesAdd: function() {
-                
+            handleFilesAdd: function(e) {
+                var files = e.target.files; // FileList object
+                var filesAddedCount = 0;
+
+                // Loop through the FileList and render image files as thumbnails.
+                for (var i = 0, f; f = files[i]; i++) {
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+                    filesAddedCount++;
+                    this.model.addFileToUpload(f);
+                    var reader = new FileReader();
+                    // - 1 т.к. fileId инкрементируется ПОСЛЕ использования в качестве индекса в ф-ии addFileToUpload
+                    reader.fileId = this.model.fileId - 1;
+                    reader.onload = (function(file, parentView, pictureModel, pictureView) {
+                        return function(e) {
+                            var model = new pictureModel({
+                                src: e.target.result,
+                                comment: file.name,
+                                fileId: this.fileId,
+                                albumModel: parentView.model,
+                                //не будет обработки src специфичной для картинок с сервера
+                                local: true,
+                                mode: 'upload-preview'
+                            });
+                            var view = new pictureView({
+                                model: model, 
+                                container: parentView.$('.uploaded-files'),
+                                parentView: parentView
+                            });
+                            parentView.model.toUploadFileViews[this.fileId] = view;
+                            view.render();
+                        };
+                    })(f, this, pictureModel, pictureView);
+                    reader.readAsDataURL(f);
+                }
+                if(filesAddedCount > 0) {
+                    this.$('.upload').removeClass('hide');
+                }
             },
-            uploadFiles: function() {
-                window.File && window.FileReader && window.FileList && window.Blob;
+            clearInput: function() {
+                this.$('input.files').val(null);
             },
             delete: function() {
                 var that = this;

@@ -34,7 +34,8 @@
             };
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
-                'picBase': '<?=Yii::app()->baseUrl ?>'
+                'picBase': '<?=Yii::app()->baseUrl ?>',
+                'bay': '<?=$this->createUrl('controls/bay') ?>'
             };
             var setatusTexts = {
                 <?php foreach(Statuses::model()->findAll() as $status) : ?>

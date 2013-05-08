@@ -62,11 +62,21 @@ define([
                 });
                 if(window.sessionStorage) {
                     var positionLeft = window.sessionStorage.getItem('galleryMenuPosition.left');
-                    if(positionLeft) {
+                    var positionTop = window.sessionStorage.getItem('galleryMenuPosition.top');
+                    if(parseInt(positionLeft) > $(window).width() - $(this.el).find('.cloud').width() 
+                        || parseInt(positionTop) > $(window).height() - $(this.el).find('.cloud').height()) 
+                    {
                         $(this.el).find('.cloud').css({
-                            left: positionLeft, 
-                            top: window.sessionStorage.getItem('galleryMenuPosition.top')
+                            left: '0px', 
+                            top: $(window).height() - $(this.el).find('.cloud').outerHeight() + 'px'
                         });
+                    } else {
+                        if(positionLeft) {
+                            $(this.el).find('.cloud').css({
+                                left: positionLeft, 
+                                top: window.sessionStorage.getItem('galleryMenuPosition.top')
+                            });
+                        }
                     }
                     var isRolldowned = window.sessionStorage.getItem('cloudrolldowned');
                     if(isRolldowned && isRolldowned == 'true') {
