@@ -50,7 +50,7 @@ return array(
 			'params' => defined(IMAGE_DRIVER_DIRECTORY)? false: array('directory' => IMAGE_DRIVER_DIRECTORY)
         ),
 		'db' => array(
-			'connectionString' => 'sqlite:' . dirname(__FILE__) . '/../data/flekr.db',
+			'connectionString' => 'sqlite:' . dirname(__FILE__) . '/../data/shepi.db',
 			'enableProfiling' => true,
 			'enableParamLogging' => true
 		),
