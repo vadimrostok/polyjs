@@ -7,6 +7,7 @@ define([
         'bootstrap'
     ], 
     function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp) {
+
         var handleKeyPressForGallsery = function(e) {
             var keyCode = e.keyCode;
             // 40 down
@@ -35,6 +36,7 @@ define([
         }
         $(document).on('keyup', handleKeyPressForGallsery);
         var gallery = Backbone.View.extend({
+            commentsOpened: false,
             attributes: {
                 'class': 'gallery'
             },
@@ -232,7 +234,35 @@ define([
                 }
             },
             commentsToggle: function() {
-
+                if(this.commentsOpened) {
+                    this.hideComments();
+                } else {
+                    this.loadCommentsModule(this.selectedPictureModel.get('id'));
+                    $(this.el).find('.comments').removeClass('hide');
+                    $(this.el).find('.show-comments').text('Спрятать комментарии');
+                }
+            },
+            hideComments: function() {
+                $('.hypercomments-script').remove();
+                $(this.el).find('#hypercomments_widget').html('');
+                $(this.el).find('.comments').addClass('hide');
+                $(this.el).find('.show-comments').text('Комментарии');
+            },
+            loadCommentsModule: function(uniqId) {
+                var _hcp = _hcp || {};
+                _hcp.widget_id = 7336;
+                _hcp.widget = "Stream";
+                //_hcp.xid = uniqId;
+                (function() {
+                    var hcc = document.createElement("script");
+                    hcc.type = "text/javascript";
+                    hcc.async = true;
+                    hcc.src = ("https:" == document.location.protocol ? "https" : "http")
+                        + "://widget.hypercomments.com/apps/js/hc.js";
+                    hcc.class = 'hypercomments-script';
+                    var s = document.getElementsByTagName("script")[0];
+                    s.parentNode.insertBefore(hcc, s.nextSibling);
+                })();
             },
             showEditPicture: function() {
                 var that = this;
