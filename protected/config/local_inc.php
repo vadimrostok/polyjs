@@ -8,5 +8,6 @@ if(defined(YII_DEBUG)) {
 
 date_default_timezone_set('Europe/Kiev');
 
+defined('DB_FILE') or define('DB_FILE', 'flekr.db');
 defined('IMAGE_DRIVER') or define('IMAGE_DRIVER', 'ImageMagick');
 defined('IMAGE_DRIVER_DIRECTORY') or define('IMAGE_DRIVER_DIRECTORY', 'C:\Program Files (x86)\ImageMagick-6.8.4-Q16');

@@ -1,7 +1,4 @@
-/**
- * сделать общую вьюшку "попап" (нужен удобный функционал выбора шаблона - содержимого попапа)
- * и шаблоны для "попап" и "редактирование картинки"
- */
+
 define([
         'boilerplate',
         'views/picture/slide',
@@ -9,7 +6,34 @@ define([
         'libs/require/text!templates/common/pictureCloudInfo.html',
         'bootstrap'
     ], 
-    function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp){
+    function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp) {
+        var handleKeyPressForGallsery = function(e) {
+            var keyCode = e.keyCode;
+            // 40 down
+            // 39 right
+            // 38 up
+            // 37 left
+            // 13 enter
+            // 27 escape
+            switch(keyCode) {
+                case 27:
+                    if(window.currentGallery) {
+                        window.currentGallery.remove();
+                    }
+                    break;
+                case 39:
+                    if(window.currentGallery) {
+                        window.currentGallery.move(1);
+                    }
+                    break;
+                case 37:
+                    if(window.currentGallery) {
+                        window.currentGallery.move(-1);
+                    }
+                    break;
+            }
+        }
+        $(document).on('keyup', handleKeyPressForGallsery);
         var gallery = Backbone.View.extend({
             attributes: {
                 'class': 'gallery'
@@ -30,12 +54,13 @@ define([
                     var model = this.selectedPictureModel;
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
                 }, this);
-
                 this.render();
+                window.currentGallery = this;
             },
             remove: function() {
                 $('body').css({'overflow': 'auto'});
                 $(this.el).remove();
+                window.currentGallery = null;
             },
             render: function() {
                 $(this.el).html(_.template(galleryTmp, this.model.toJSON()));
@@ -144,11 +169,9 @@ define([
                 }
             },
             nextPicture: function() {
-                app.log('gallery nextPicture')
                 this.move(1);
             },
             prevPicture: function() {
-                app.log('gallery prevPicture')
                 this.move(-1);
             },
             move: function(step) {
