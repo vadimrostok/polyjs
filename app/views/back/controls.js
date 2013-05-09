@@ -67,7 +67,7 @@ define([
                     data.albums.views[element.get('id')] = 
                         new albumView({
                             model: element, 
-                            container: this.$('.controls')
+                            container: this.$('.albums-box')
                         });
                     data.albums.views[element.get('id')].render(false, false, true);
                 });

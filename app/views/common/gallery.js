@@ -61,6 +61,9 @@ define([
             },
             remove: function() {
                 $('body').css({'overflow': 'auto'});
+                if(this.commentsOpened) {
+                    this.hideComments();
+                }
                 $(this.el).remove();
                 window.currentGallery = null;
             },
@@ -238,31 +241,31 @@ define([
                     this.hideComments();
                 } else {
                     this.loadCommentsModule(this.selectedPictureModel.get('id'));
-                    $(this.el).find('.comments').removeClass('hide');
+                    $(this.el).find('.comments')
+                        .removeClass('hide')
+                        .append($('#disqus_thread'));
                     $(this.el).find('.show-comments').text('Спрятать комментарии');
                 }
+                this.commentsOpened = !this.commentsOpened;
             },
             hideComments: function() {
                 $('.hypercomments-script').remove();
                 $(this.el).find('#hypercomments_widget').html('');
-                $(this.el).find('.comments').addClass('hide');
+                $(this.el)
+                    .find('.comments')
+                    .addClass('hide')
+                    .find('#disqus_thread')
+                    .appendTo($('#comments-box'));
                 $(this.el).find('.show-comments').text('Комментарии');
             },
             loadCommentsModule: function(uniqId) {
-                var _hcp = _hcp || {};
-                _hcp.widget_id = 7336;
-                _hcp.widget = "Stream";
-                //_hcp.xid = uniqId;
-                (function() {
-                    var hcc = document.createElement("script");
-                    hcc.type = "text/javascript";
-                    hcc.async = true;
-                    hcc.src = ("https:" == document.location.protocol ? "https" : "http")
-                        + "://widget.hypercomments.com/apps/js/hc.js";
-                    hcc.class = 'hypercomments-script';
-                    var s = document.getElementsByTagName("script")[0];
-                    s.parentNode.insertBefore(hcc, s.nextSibling);
-                })();
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = 'picture' + uniqId;  
+                        //this.page.url = 'http://shepi.poly-js.com/#p' + uniqId;
+                    }
+                });
             },
             showEditPicture: function() {
                 var that = this;
