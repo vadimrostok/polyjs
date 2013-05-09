@@ -22,8 +22,6 @@ define([
                 }
 
                 $(this.el).find('img').css({'max-height': $(window).height() - 10 + 'px'});
-                
-                app.log('picture_slide render')
             },
         });
 
