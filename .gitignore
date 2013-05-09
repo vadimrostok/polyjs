@@ -1,5 +1,5 @@
 protected/data/*
-protected/config/local_inc.php
+protected/config/local_inc*
 protected/runtime
 data
 assets
