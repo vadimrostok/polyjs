@@ -15,6 +15,9 @@ class ExposeController extends Controller
 		$this->redirect($this->createUrl('expose/list'));
 	}
 
+	/*
+	* в будущем нужен будет функционал создания альбомов гостями. 
+	* сий код оставлю в качествее напоминания об этом
 	public function actionBay()
 	{
 		$response = array();
@@ -43,6 +46,7 @@ class ExposeController extends Controller
 		}
 		$this->json($response);
 	}
+	*/
 
 	public function actionError()
 	{

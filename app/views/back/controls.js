@@ -70,7 +70,7 @@ define([
                             model: element, 
                             container: this.$('.albums-box')
                         });
-                    data.albums.views[element.get('id')].render(false, false, true);
+                    data.albums.views[element.get('id')].render(false, false /*, true*/);
                 });
                 data.albums.list.trigger('render:albums');
             },

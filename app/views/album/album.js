@@ -14,6 +14,7 @@ define([
         }
         window.de = data.expandedAlbusViews;
         var album = Backbone.View.extend({
+            state: 'icon', 
             previewsHeight: 0,
             useBigPreviews: null,
             sliderInterval: null,
@@ -30,6 +31,7 @@ define([
                 'click .delete': 'delete',
                 'click .close, .closefield': 'hideDetails',
                 'change .files': 'handleFilesAdd',
+                'mouseout .album-title': 'runSlider',
                 'click .upload': function() {this.model.uploadPictures();}
             },
             initialize: function(data) {
@@ -53,17 +55,20 @@ define([
                 this.previewPicturesRendered = 0;
                 var that = this;
                 var id = this.model.get('id');
+                var icon_size = this.model.get('icon_size');
+                var previewHeight = 100;
                 if(typeof useBigPreviews == 'undefined' && this.useBigPreviews) {
                     useBigPreviews = this.useBigPreviews;
                 }
-                if(useBigPreviews == true) {
-                    var previewHeight = 400;
-                    this.useBigPreviews = useBigPreviews;
+                if(icon_size > 0) {
+                    useBigPreviews = (icon_size == 100)? false: true;
+                    previewHeight = icon_size;
+                } else if(useBigPreviews == true) {
+                    previewHeight = 400;
                 } else {
                     useBigPreviews = false;
-                    var previewHeight = 100;
-                    this.useBigPreviews = useBigPreviews;
                 }
+                this.useBigPreviews = useBigPreviews;
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
                 if(!this.renderedOnce && !reRenderPictures && this.container) {
                     this.container.append(this.el);
@@ -104,9 +109,32 @@ define([
                 }
                 this.renderedOnce = true;
                 
-                this.setSlider();
+                //this.setSlider();
             },
-            setSlider: function() {
+            runSlider: function() {
+                var that = this;
+                var top, height, pictureHeight;
+                var viewPortHeight = 200;
+                if(Math.random() > 0.5) {
+                    return true;
+                }
+                setTimeout(function() {
+                    $(that.el).find('.previews').each(function(index, element) {
+                        if($(that).hasClass('albumDetails')) {
+                            return 1;
+                        }
+                        top = parseInt($(element).css('top')) || 0;
+                        pictureHeight = $(element).find('.picture').outerHeight();
+                        height = $(element).innerHeight();
+                        if(-top < height - viewPortHeight && height > $(element).parent().height()) {
+                            $(element).stop(true, true).animate({top: top - pictureHeight - 6 + 'px'}, 1000);
+                        } else {
+                            $(element).stop(true, true).animate({top: '0px'}, 1500);
+                        }
+                    });
+                }, Math.random()*5000);
+            },
+            /*setSlider: function() {
                 var that = this;
                 var top, height, pictureHeight;
                 var viewPortHeight = 200;
@@ -120,14 +148,15 @@ define([
                             pictureHeight = $(element).find('.picture').outerHeight();
                             height = $(element).innerHeight();
                             if(-top < height - viewPortHeight && height > $(element).parent().height()) {
-                                $(element).css({top: top - pictureHeight - 6 + 'px'});
+                                //$(element).css({top: top - pictureHeight - 6 + 'px'});
+                                $(element).animate({top: top - pictureHeight - 6 + 'px'}, 1000);
                             } else {
                                 $(element).css({top: '0px'});
                             }
                         });
                     }, Math.random()*5000 + 5000);
                 }, Math.random()*5000);
-            },
+            },*/
             unsetSlider: function() {
                 $(this.el).find('.previews').stop(true, true);
                 $(this.el).find('.previews').css({top: '0px'});
@@ -168,6 +197,7 @@ define([
                 this.unsetSlider();
                 data.expandedAlbusViews.push(id);
                 window.mainRouter.navigate('album-' + id);
+                this.state = 'details';
             },
             hideDetails: function() {
                 //this.model.clearToUploadFileList();
@@ -179,10 +209,11 @@ define([
                     .find('.album-title').show();
                 $(this.el).find('.bground').addClass('hide');
                 $(this.el).find('.previews').css({'height': this.previewsHeight + 'px'});
-                this.setSlider();
+                //this.setSlider();
                 var index = _.indexOf(data.expandedAlbusViews, this.model.get('id'));
                 delete data.expandedAlbusViews[index];
-                window.mainRouter.navigate('');
+                //window.mainRouter.navigate('');
+                this.state = 'icon';
             },
             showEdit: function() { 
                 var that = this;

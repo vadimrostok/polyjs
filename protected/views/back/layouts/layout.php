@@ -25,7 +25,7 @@
                 }
             </style>
         <?php else : ?>
-            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
+            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/backEnd" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
         <?php endif ?>
 
         <script type="text/javascript">

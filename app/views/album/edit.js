@@ -45,6 +45,9 @@ define([
                     success: function() {
                         var ntf = new notification({modelAttrs: {text: 'Изменения сохранены успешно.', duration: 5000}});
                         ntf.render();
+                    },
+                    error: function() {
+                        console.log(arguments)
                     }
                 });
                 if(this.albumView) {

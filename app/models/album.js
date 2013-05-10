@@ -62,16 +62,16 @@ define([
                     xhr.upload.addEventListener('progress', function(e) {
                         if (e.lengthComputable) {
                             var progress = (e.loaded * 100) / e.total;
-                            console.log(progress);
+                            //console.log(progress);
                         }
                     }, false);
 
                     xhr.onreadystatechange = function () {
                         if (this.readyState == 4) {
                             if(this.status == 200) {
-                                console.log('finish');
+                                //console.log('finish');
                             } else {
-                                console.log(arguments);
+                                //console.log(arguments);
                             }
                             that.toUploadFileViews[this.tmpFileId].remove();
                             that.removeToUploadFile(this.tmpFileId);

@@ -1,7 +1,6 @@
 <?php
 class Picture extends CActiveRecord
 {
-    //use restApi;
 
     //объект класса CUploadedFile
     public $image;
@@ -59,7 +58,7 @@ class Picture extends CActiveRecord
         if(parent::beforeSave()) {
             if($this->isNewRecord) {
                 if(isset($this->image)) {
-                    $pathinfo = pathinfo($this->name);
+                    $pathinfo = pathinfo($this->image->name);
                     $this->name = $this->image->name;
                     $this->filename = md5(microtime()) . '_' . md5($this->name) . '.' . $pathinfo['extension'];
                     $this->client_path = AlbumPictures::SAVEDIR . '/' . $this->album_id . '/';

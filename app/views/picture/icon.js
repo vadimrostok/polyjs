@@ -28,7 +28,6 @@ define([
                 $(this.el).remove();
             },
             render: function(useBigPreviews) {
-                window.el = this.el;
                 var prefix = '';
                 if(useBigPreviews == true) {
                     $(this.el).attr('class', 'picture bigPictureIcon');
@@ -47,7 +46,11 @@ define([
                 this.container.append(this.el);
             },
             showPicture: function() {
-                var albumModel = data.albums.list.get(this.model.get('album_id'));
+                var id = this.model.get('album_id');
+                var albumModel = data.albums.list.get(id);
+                if(data.albums.views[id].state == 'icon') {
+                    data.albums.views[id].showDetails();
+                }
                 var that = this;
                 require(['views/common/gallery', 'jqueryui'], function(galleryView) {
                     var gallery = new galleryView({model: albumModel, selectedPictureModel: that.model});

@@ -24,10 +24,14 @@
                 <!-- Сюда динамически вставится модуль комментаиев disqus -->
             </div>
             <div class="cloud rolluped">
+                <div class="gradient-top-box">
+                    <h2>∭</h2>
+                </div>
                 <span class="label">Альбом:</span>
                 <span class="label label-info"><%= title %></span>
                 <hr/>
                 <div class="picture-info"></div>
+                <% if(app.is_admin) { %>
                 <div class="btn-group">
                     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                         Редактировать
@@ -39,11 +43,14 @@
                         <li><a href="#" class="delete">Удалить изображение</a></li>
                     </ul>
                 </div>
-                <button class="btn-success btn rolldown">Свернуть меню</button>
+                <% } else { %>
+                    <button class="btn-info btn show-comments">Комментарии</button>
+                <% } %>
+                <button class="btn-success btn rolldown">Свернуть ∭</button>
                 <button class="btn-danger btn closefield"><abbr title="Так же Вы можете кликнуть по темному фону или нажать клавишу Esc.">Закрыть</abbr></button>
             </div>
             <div class="cloud rolldowned rolldowned-menu hide">
-                <button class="btn-primary btn rolldown">Меню</button>
+                <button class="btn-primary btn rolldown">∭</button>
                 <button class="btn-info btn show-comments">Комментарии</button>
             </div>
             <!--

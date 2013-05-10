@@ -3,12 +3,14 @@ define([
     ],
     function(boilerplate) {
         var Workspace = Backbone.Router.extend({
+            nothingWasRouted: true,
             routes: {
                 'album-:id': 'album',
                 'album-:aid/picture-:pid': 'picture',
                 'init': 'init'
             },
             album: function(id) {
+                this.nothingWasRouted = true;
                 if(!(id && data && data.albums && data.albums.list)) {
                     return false;
                 }
@@ -24,6 +26,7 @@ define([
                 } else f();
             },
             picture: function(aid, pid) {
+                this.nothingWasRouted = true;
                 if(!(aid && pid && data && data.albums && data.albums.list)) {
                     return false;
                 }

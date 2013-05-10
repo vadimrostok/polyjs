@@ -22,10 +22,10 @@ define([
                         window.currentGallery.remove();
                         break;
                     case 39:
-                        window.currentGallery.move(1);
+                        window.currentGallery.move(1, true);
                         break;
                     case 37:
-                        window.currentGallery.move(-1);
+                        window.currentGallery.move(-1, true);
                         break;
                 }
             }
@@ -184,7 +184,22 @@ define([
             prevPicture: function() {
                 this.move(-1);
             },
-            move: function(step) {
+            move: function(step, isKeyPressed) {
+
+                if(!isKeyPressed && window.sessionStorage) {
+                    var lastKeysNotice = window.sessionStorage.getItem('lastKeysNotice');
+                    if(!lastKeysNotice || lastKeysNotice < 1) {
+                        var ntf = new notification({modelAttrs: {text: 'Для перелистывания изображений очень удобно<br/>'
+                            + 'использовать клавиши управлений курсором.<br/>'
+                            + 'Кстати, для закрытия галереи Вы можете нажать клавищу Esc.', duration: 15000}});
+                        ntf.render();
+                        window.sessionStorage.setItem('lastKeysNotice', 20);
+                    } else {
+                        window.sessionStorage.setItem('lastKeysNotice', lastKeysNotice - 1);
+                    }
+                } else if(isKeyPressed && window.sessionStorage) {
+                    window.sessionStorage.setItem('lastKeysNotice', 200);
+                }
                 var that = this;
                 var picturesList = that.model.get('pictures');
                 var currentIndex = picturesList.indexOf(that.selectedPictureModel);
