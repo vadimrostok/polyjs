@@ -163,14 +163,15 @@ form input:focus, form select:focus {
             font-family: @baseFontFamily;
             position: absolute;
             bottom: 0px;
-            margin: 0px 0px 0px -3px;
+            margin: 0px 0px 0px 3px;
             padding: 50% 15px 15px 15px;
-            width: 170px;
+            width: 164px;
             font-size: 1.2em;
             background-color: fadeout(@grayLighter, 20%);
             color: darken(@blue, 20%);
             text-shadow: 1px 0px #fff, -1px 0px #fff;
             z-index: 5;
+            word-wrap: break-word;
 
             background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(224,224,224,0.44) 44%, rgba(229,229,229,1) 100%); /* FF3.6+ */
             background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(44%,rgba(224,224,224,0.44)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
