@@ -1,4 +1,5 @@
-protected/data/flekr.db
+protected/data/*
+protected/config/local_inc*
 protected/runtime
 data
 assets

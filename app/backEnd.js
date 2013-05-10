@@ -1,8 +1,9 @@
 define([
         'boilerplate',
-        'views/back/controls'
+        'views/back/controls',
+        'routers/main'
     ],
-    function(boilerplate, appView) {
+    function(boilerplate, appView, Workspace) {
         //appView: загрузка данных и последующий
         //рендеринг(по событию загрузки альбомов) запускаются в конструкторе
 
@@ -35,6 +36,11 @@ define([
         });
 
         window.app = _.extend(window.app, app);
+
+
+        window.mainRouter = new Workspace();
+
+        Backbone.history.start();
 
         return app;
     }

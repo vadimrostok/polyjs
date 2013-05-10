@@ -22,8 +22,8 @@ define([
                 }
 
                 $(this.el).find('img').css({'max-height': $(window).height() - 10 + 'px'});
-                
-                app.log('picture_slide render')
+
+                window.mainRouter.navigate('album-' + this.model.get('album_id') + '/picture-' + this.model.get('id'));
             },
         });
 

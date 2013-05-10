@@ -1,7 +1,4 @@
-/**
- * сделать общую вьюшку "попап" (нужен удобный функционал выбора шаблона - содержимого попапа)
- * и шаблоны для "попап" и "редактирование картинки"
- */
+
 define([
         'boilerplate',
         'views/picture/slide',
@@ -9,8 +6,34 @@ define([
         'libs/require/text!templates/common/pictureCloudInfo.html',
         'bootstrap'
     ], 
-    function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp){
+    function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp) {
+
+        var handleKeyPressForGallsery = function(e) {
+            var keyCode = e.keyCode;
+            // 40 down
+            // 39 right
+            // 38 up
+            // 37 left
+            // 13 enter
+            // 27 escape
+            if(window.currentGallery) {
+                switch(keyCode) {
+                    case 27:
+                        window.currentGallery.remove();
+                        break;
+                    case 39:
+                        window.currentGallery.move(1);
+                        break;
+                    case 37:
+                        window.currentGallery.move(-1);
+                        break;
+                }
+            }
+        }
+        $(document).on('keyup', handleKeyPressForGallsery);
+
         var gallery = Backbone.View.extend({
+            commentsOpened: false,
             attributes: {
                 'class': 'gallery'
             },
@@ -30,18 +53,24 @@ define([
                     var model = this.selectedPictureModel;
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
                 }, this);
-
-                this.render();
+                window.currentGallery = this;
             },
             remove: function() {
                 $('body').css({'overflow': 'auto'});
+                if(this.commentsOpened) {
+                    this.hideComments();
+                }
+                window.mainRouter.navigate('album-' + this.selectedPictureModel.get('album_id'));
                 $(this.el).remove();
+                window.currentGallery = null;
             },
             render: function() {
                 $(this.el).html(_.template(galleryTmp, this.model.toJSON()));
                 $('#page').append(this.el);
 
                 var that = this;
+                var picturesList = this.model.get('pictures');
+                var id = this.selectedPictureModel.get('id');
                 //можно таскать по экрану
                 $(this.el).find('.cloud').draggable({
                     containment: 'parent', 
@@ -92,16 +121,22 @@ define([
                 //создавались новые модели
                 this.processPreload();
                 //сразу закидываем в загруженное
-                this.preloaded[this.selectedPictureModel.get('id')] = new pictureSlideView({
+                this.preloaded[id] = new pictureSlideView({
                     model: this.selectedPictureModel, 
                     container: this.containerForPicture
                 });
                 //основная картинка. модель найдена, рендерим
-                this.selectedPictureView = this.preloaded[this.selectedPictureModel.get('id')];
+                this.selectedPictureView = this.preloaded[id];
                 this.selectedPictureView.render();
                 that.trigger('change:picture');
 
+                //прячем скролл 
                 $('body').css({'overflow': 'hidden'});
+
+                //прячем стрелки если всего 1 картинка
+                if(picturesList.length < 2)  {
+                    this.$('.goright, .goleft').hide();
+                }
             },
             processPreload: function() {
                 var picturesList = this.model.get('pictures');
@@ -144,17 +179,13 @@ define([
                 }
             },
             nextPicture: function() {
-                app.log('gallery nextPicture')
                 this.move(1);
             },
             prevPicture: function() {
-                app.log('gallery prevPicture')
                 this.move(-1);
             },
             move: function(step) {
                 var that = this;
-                $(that.el).find('.gallery-viewport .picture').remove();
-
                 var picturesList = that.model.get('pictures');
                 var currentIndex = picturesList.indexOf(that.selectedPictureModel);
 
@@ -163,6 +194,7 @@ define([
                     that.trigger('break:onepic');
                     return false;
                 }
+
                 if(!picturesList.at(currentIndex + step)) {
                     if(currentIndex + step < 0) {
                         //выход за левую границу
@@ -179,6 +211,8 @@ define([
                 //console.log(that.selectedPictureModel)
                 that.trigger('change:picture');
 
+                $(that.el).find('.gallery-viewport .picture').remove();
+
                 if(that.preloaded[that.selectedPictureModel.get('id')]) {
                     that.selectedPictureView = that.preloaded[that.selectedPictureModel.get('id')];
                     that.selectedPictureView.render();
@@ -191,6 +225,10 @@ define([
                 }
 
                 that.processPreload();
+
+                if(this.commentsOpened) {
+                    this.loadCommentsModule();
+                }
             },
             cloudRolldownToggle: function() {
                 var isRolldowned = 'false';
@@ -209,7 +247,38 @@ define([
                 }
             },
             commentsToggle: function() {
-
+                if(this.commentsOpened) {
+                    this.hideComments();
+                } else {
+                    this.loadCommentsModule(this.selectedPictureModel.get('id'));
+                    $(this.el).find('.comments')
+                        .removeClass('hide')
+                        .append($('#disqus_thread'));
+                    $(this.el).find('.show-comments').text('Спрятать комментарии');
+                }
+                this.commentsOpened = !this.commentsOpened;
+            },
+            hideComments: function() {
+                $('.hypercomments-script').remove();
+                $(this.el).find('#hypercomments_widget').html('');
+                $(this.el)
+                    .find('.comments')
+                    .addClass('hide')
+                    .find('#disqus_thread')
+                    .appendTo($('#comments-box'));
+                $(this.el).find('.show-comments').text('Комментарии');
+            },
+            loadCommentsModule: function(uniqId) {
+                disqus_identifier = 'picture' + uniqId;
+                disqus_title = 'Picture';
+                disqus_url = 'http://shepi.poly-js.com/p' + uniqId;
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = 'picture' + uniqId;  
+                        this.page.url = 'http://shepi.poly-js.com/p' + uniqId;
+                    }
+                });
             },
             showEditPicture: function() {
                 var that = this;

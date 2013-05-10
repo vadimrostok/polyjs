@@ -52,6 +52,7 @@ define([
             render: function(reRenderPictures, detailsMode, useBigPreviews) {
                 this.previewPicturesRendered = 0;
                 var that = this;
+                var id = this.model.get('id');
                 if(typeof useBigPreviews == 'undefined' && this.useBigPreviews) {
                     useBigPreviews = this.useBigPreviews;
                 }
@@ -71,7 +72,7 @@ define([
                     .removeClass(statusColorClasses.all)
                     .addClass(statusColorClasses[this.model.get('status_id')]);
 
-                data.pictures.views[this.model.get('id')] = {};
+                data.pictures.views[id] = {};
 
                 var pictures = this.model.get('pictures');
                 if(detailsMode) {
@@ -85,12 +86,12 @@ define([
                 if(pictures && pictures.length > 0) {
                     for(var i = 0; i < showPicturesCount; i++) {
                         if(pictures.at(i)) {
-                            data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
+                            data.pictures.views[id][pictures.at(i).get('id')] = 
                                 new pictureView({
                                     model: pictures.at(i), 
                                     container: this.$('.previews')
                                 });
-                            data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render(/*use big previews?no*/useBigPreviews);
+                            data.pictures.views[id][pictures.at(i).get('id')].render(/*use big previews?no*/useBigPreviews);
                             this.previewPicturesRendered++;
                         }
                     }
@@ -133,6 +134,7 @@ define([
                 clearInterval(this.sliderInterval);
             },
             showDetails: function() {
+                var id = this.model.get('id');
                 for(var i = 0; i < data.expandedAlbusViews.length; i++) {
                     if(data.expandedAlbusViews[i]) {
                         data.albums.views[data.expandedAlbusViews[i]].hideDetails();
@@ -151,12 +153,12 @@ define([
                     if(pictures && pictures.length > 0) {
                         for(var i = this.previewPicturesCount; i < pictures.length; i++) {
                             if(pictures.at(i)) {
-                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')] = 
+                                data.pictures.views[id][pictures.at(i).get('id')] = 
                                     new pictureView({
                                         model: pictures.at(i), 
                                         container: this.$('.previews')
                                     });
-                                data.pictures.views[this.model.get('id')][pictures.at(i).get('id')].render(this.useBigPreviews);
+                                data.pictures.views[id][pictures.at(i).get('id')].render(this.useBigPreviews);
                             }
                         }
                     }
@@ -164,7 +166,8 @@ define([
                 }
                 $(this.el).find('.previews').css({'height': 'auto'});
                 this.unsetSlider();
-                data.expandedAlbusViews.push(this.model.get('id'));
+                data.expandedAlbusViews.push(id);
+                window.mainRouter.navigate('album-' + id);
             },
             hideDetails: function() {
                 //this.model.clearToUploadFileList();
@@ -179,6 +182,7 @@ define([
                 this.setSlider();
                 var index = _.indexOf(data.expandedAlbusViews, this.model.get('id'));
                 delete data.expandedAlbusViews[index];
+                window.mainRouter.navigate('');
             },
             showEdit: function() { 
                 var that = this;
