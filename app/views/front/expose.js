@@ -38,7 +38,7 @@ define([
                 progressBar(100);
 
                 setTimeout(function() {
-                    $('#mainProgressBar').parent().addClass('hide');
+                    $('#mainProgressBar').parent().parent().addClass('hide');
                     $(that.el).removeClass('hide');
                 }, 300);
             },

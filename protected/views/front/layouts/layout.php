@@ -51,14 +51,17 @@
     </head>
     <body>
         <div class="container" id="page">
-            <div class="progress progress-striped active">
-                <div class="bar" id="mainProgressBar" style="width: 0%;"></div>
+            <div class="loading">
+                <h1>Загрузка ♫♪</h1>
+                <h3>Подождите пожалуйста, Я экономлю на хостинге.</h3>
+                <div class="progress progress-striped active">
+                    <div class="bar" id="mainProgressBar" style="width: 0%;"></div>
+                </div>
             </div>
             <?php echo $content; ?>
         </div>
         <div class="container footer">
             <h2>2013</h2>
-            <br/>
             <h2 style="display: inline;">✎</h2> to <a href="mailto:vadimrostok@gmail.com">vadimrostok@gmail.com</a>
         </div>
     </body>
