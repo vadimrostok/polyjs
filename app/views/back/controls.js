@@ -41,6 +41,7 @@ define([
                 var that = this;
                 data.albums.list.fetch({success: function() {
                     that.trigger('load:albums');
+                    data.albums.list.trigger('load:albums');
                 }});
             },
             render: function() {
@@ -71,6 +72,7 @@ define([
                         });
                     data.albums.views[element.get('id')].render(false, false, true);
                 });
+                data.albums.list.trigger('render:albums');
             },
             createNewAlbum: function() {
                 var that = this;

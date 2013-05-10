@@ -51,6 +51,7 @@ define([
                 var that = this;
                 require(['views/common/gallery', 'jqueryui'], function(galleryView) {
                     var gallery = new galleryView({model: albumModel, selectedPictureModel: that.model});
+                    gallery.render();
                 });
             }
         });
