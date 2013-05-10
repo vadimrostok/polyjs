@@ -22,10 +22,10 @@ class RestController extends Controller
     {
         switch($model) {
             case 'album':
-                $data = Album::restList();
+                $data = Rest::_list(Album::model());
                 break;
             case 'picture':
-                $data = Picture::restList();
+                $data = Rest::_list(Picture::model());
                 break;
             case 'albumsWithPictures':
                 restApi::releseResponse(
@@ -46,11 +46,11 @@ class RestController extends Controller
     {
         switch($model) {
             case 'album':
-                $data = Album::restView($id);
+                $data = Rest::view(Album::model()->findByPk($id));
                 exit;
                 break;
             case 'picture':
-                $data = Picture::restView($id);
+                $data = Rest::view(Picture::model()->findByPk($id));
                 break;
             default:
                 $errText = sprintf('Mode view is not implemented for model %s', $model);
@@ -78,10 +78,10 @@ class RestController extends Controller
         }
         switch($model) {
             case 'album':
-                $data = Album::restCreate($post_vars);
+                $data = Rest::create(Album, $post_vars);
                 break;
             case 'picture':
-                $data = Picture::restCreate($post_vars);
+                $data = Rest::create(Picture, $post_vars);
                 break;
             default:
                 $errText = sprintf('Mode create is not implemented for model %s', $model);
@@ -98,10 +98,10 @@ class RestController extends Controller
         $put_vars = CJSON::decode($json, true); 
         switch($model) {
             case 'album':
-                $data = Album::restUpdate($id, $put_vars);
+                $data = Rest::update(Album::model()->findByPk($id), $post_vars);
                 break;
             case 'picture':
-                $data = Picture::restUpdate($id, $put_vars);
+                $data = Rest::update(Picture::model()->findByPk($id), $post_vars);
                 break;
             default:
                 $errText = sprintf('Mode update is not implemented for model %s', $model);
@@ -116,10 +116,10 @@ class RestController extends Controller
     {
         switch($model) {
             case 'album':
-                $data = Album::restDelete($id);
+                $data = Rest::delete(Album::model()->findByPk($id));
                 break;
             case 'picture':
-                $data = Picture::restDelete($id);
+                $data = Rest::delete(Picture::model()->findByPk($id));
                 break;
             default:
                 $errText = sprintf('Mode delete is not implemented for model %s', $model);

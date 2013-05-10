@@ -66,7 +66,6 @@ class ControlsController extends Controller
 
     public function actionBay()
     {
-
         $response = array();
         if(isset($_POST['images']) || isset($_POST['album_id'])) {
             if(!isset($_POST['album_id'])) {

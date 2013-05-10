@@ -1,7 +1,7 @@
 <?php
 class Album extends CActiveRecord
 {
-    use restApi;
+    //use restApi;
 
     public $id;
     public $title;

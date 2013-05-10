@@ -1,7 +1,7 @@
 <?php
 class Picture extends CActiveRecord
 {
-    use restApi;
+    //use restApi;
 
     //объект класса CUploadedFile
     public $image;
@@ -59,12 +59,13 @@ class Picture extends CActiveRecord
         if(parent::beforeSave()) {
             if($this->isNewRecord) {
                 if(isset($this->image)) {
+                    $pathinfo = pathinfo($this->name);
                     $this->name = $this->image->name;
-                    $this->filename = md5(microtime()) . '_' . md5($this->name) . '.' . pathinfo($this->name)['extension'];
+                    $this->filename = md5(microtime()) . '_' . md5($this->name) . '.' . $pathinfo['extension'];
                     $this->client_path = AlbumPictures::SAVEDIR . '/' . $this->album_id . '/';
                     $this->path = Yii::app()->controller->relesePath(Yii::getPathOfAlias('webroot') . $this->client_path) . $this->filename;
 
-                    $dirname = pathinfo($this->path)['dirname'];
+                    $dirname = $pathinfo['dirname'];
                     if(!is_dir($dirname)) {
                         mkdir($dirname, 0755);
                     }

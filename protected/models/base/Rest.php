@@ -1,38 +1,22 @@
 <?php
-class restApi extends Rest
-{
-
-};
-/*
-trait restApi
-{
-    public static function model($className = __CLASS__)
-    {
-        return parent::model($className);
-    }
-
-    public function tableName()
-    {
-        return '';
-    }
-    
+class Rest
+{    
     //translate into dao
-    public static function restList()
+    public static function _list($model)
     {
-        $data = self::model()->findAll();
+        $data = $model->findAll();
         self::releseResponse(
             200,
             self::prepareResponse($data)
         );
     }
 
-    public static function restView($id)
+    public static function view($model)
     {
-        $data = self::model()->findByPk($id);
-        if(isset($data)) {
+        if(isset($model)) {
             self::releseResponse(
                 200,
-                self::prepareResponse($data)
+                self::prepareResponse($model)
             );
         } else {
             self::releseResponse(
@@ -42,9 +26,9 @@ trait restApi
         }
     }
 
-    public static function restCreate($params)
+    public static function create($class, $params)
     {
-        $model = new self;
+        $model = new $class;
         foreach($params as $key => $value) {
             if($model->hasAttribute($key)) {
                 $model->$key = $value;
@@ -63,9 +47,8 @@ trait restApi
         }
     }
 
-    public static function restUpdate($id, $params, $protected_attributes = array())
+    public static function update($model, $params, $protected_attributes = array())
     {
-        $model = self::model()->findByPk($id);
         if(isset($model->protected_from_client_attributes)) {
             $protected_attributes = $model->protected_from_client_attributes;
         }
@@ -85,8 +68,7 @@ trait restApi
                 }
             }
         }
-        //echo $model->file_info;exit;
-        //echo implode(',', $updateList);exit;
+
         if($model->update(implode(',', $updateList))) {
             self::releseResponse(
                 200,
@@ -100,9 +82,8 @@ trait restApi
         }
     }
 
-    public static function restDelete($id)
+    public static function delete($model)
     {
-        $model = self::model()->findByPk($id);
         if(!isset($model)) {
             self::releseResponse(
                 404,
@@ -177,4 +158,3 @@ trait restApi
         echo $body;
     }
 }
-*/
