@@ -8,13 +8,16 @@ define([
                 'class': 'picture'
             },
             initialize: function(data) {
-                this.container = data.container;
-            },
-            render: function() {
                 this.model.setSizes();
                 $(this.el).attr('prefix', this.model.get('prefix'));
                 $(this.el).attr('item_id', this.model.get('id'));
                 $(this.el).html(_.template(pictureTmp, this.model.toJSON()));
+
+                this.container = data.container;
+
+                this.preload();
+            },
+            render: function() {
                 if(this.container.find('.picture-wrapper')) {
                     this.container.find('.picture-wrapper').append(this.el);
                 } else {
@@ -25,6 +28,9 @@ define([
 
                 window.mainRouter.navigate('album-' + this.model.get('album_id') + '/picture-' + this.model.get('id'));
             },
+            preload: function() {
+                $(this.el).appendTo('#preload-box');
+            }
         });
 
         return picture;

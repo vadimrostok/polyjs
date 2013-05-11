@@ -54,6 +54,7 @@ define([
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
                 }, this);
                 window.currentGallery = this;
+                $('#preload-box').html('');
             },
             remove: function() {
                 $('body').css({'overflow': 'auto'});
@@ -139,6 +140,7 @@ define([
                 }
             },
             processPreload: function() {
+                //надо чтоб картинка вставлялась в документ
                 var picturesList = this.model.get('pictures');
                 var currentIndex = picturesList.indexOf(this.selectedPictureModel);
                 var tmpModel;

@@ -70,5 +70,6 @@
         <div id="footer">
             <?=sprintf('%0.5f', Yii::getLogger()->getExecutionTime()) ?> sec.
         </div>
+        <div id="preload-box" class="hide"></div>
     </body>
 </html>
