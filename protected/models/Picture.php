@@ -64,6 +64,7 @@ class Picture extends CActiveRecord
                     $this->client_path = AlbumPictures::SAVEDIR . '/' . $this->album_id . '/';
                     $this->path = Yii::app()->controller->relesePath(Yii::getPathOfAlias('webroot') . $this->client_path) . $this->filename;
 
+                    $pathinfo = pathinfo($this->path);
                     $dirname = $pathinfo['dirname'];
                     if(!is_dir($dirname)) {
                         mkdir($dirname, 0755);

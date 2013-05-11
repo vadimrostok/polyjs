@@ -30,10 +30,7 @@ define([
                 }
             },
             addFileToUpload: function(file) {
-                //alert(fileId)
                 this.toUploadFilesList[this.fileId++] = file;
-                //this.fileId = this.fileId + 1;
-                //alert(this.toUploadFilesList[0])
                 app.toUploadFilesList = this.toUploadFilesList;
                 app.toUploadFileViews = this.toUploadFileViews;
             },
