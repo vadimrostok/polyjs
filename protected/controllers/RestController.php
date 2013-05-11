@@ -72,10 +72,10 @@ class RestController extends Controller
             }
             switch($model) {
                 case 'album':
-                    $data = Rest::create(Album, $post_vars);
+                    $data = Rest::create(new Album(), $post_vars);
                     break;
                 case 'picture':
-                    $data = Rest::create(Picture, $post_vars);
+                    $data = Rest::create(new Picture(), $post_vars);
                     break;
                 default:
                     $errText = sprintf('Mode create is not implemented for model %s', $model);

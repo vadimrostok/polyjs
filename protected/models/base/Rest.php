@@ -26,23 +26,22 @@ class Rest
         }
     }
 
-    public static function create($class, $params)
+    public static function create($classInstance, $params)
     {
-        $model = new $class;
         foreach($params as $key => $value) {
-            if($model->hasAttribute($key)) {
-                $model->$key = $value;
+            if($classInstance->hasAttribute($key)) {
+                $classInstance->$key = $value;
             }
         }
-        if($model->save()) {
+        if($classInstance->save()) {
             self::releseResponse(
                 200,
-                self::prepareResponse($model)
+                self::prepareResponse($classInstance)
             );
         } else {
             self::releseResponse(
                 500,
-                CJSON::encode(array('errorText' => 'Could not save model.', 'modelErrors' => $model->getErrors()))
+                CJSON::encode(array('errorText' => 'Could not save model.', 'modelErrors' => $classInstance->getErrors()))
             );
         }
     }
