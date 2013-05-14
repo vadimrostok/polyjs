@@ -64,6 +64,5 @@
             <h2>2013</h2>
             <h2 style="display: inline;">✎</h2> to <a href="mailto:vadimrostok@gmail.com">vadimrostok@gmail.com</a>
         </div>
-        <div id="preload-box" class="hide"></div>
     </body>
 </html>

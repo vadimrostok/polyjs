@@ -49,6 +49,7 @@ define([
             initialize: function(data) {
                 this.selectedPictureModel = data['selectedPictureModel'];
                 this.preloaded = {};
+                //window.preloaded = this.preloaded;
                 this.on('change:picture', function() {
                     var model = this.selectedPictureModel;
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
@@ -192,7 +193,7 @@ define([
                     var lastKeysNotice = window.sessionStorage.getItem('lastKeysNotice');
                     if(!lastKeysNotice || lastKeysNotice < 1) {
                         var ntf = new notification({modelAttrs: {text: 'Для перелистывания изображений очень удобно<br/>'
-                            + 'использовать клавиши управлений курсором.<br/>'
+                            + 'использовать клавиши управления курсором.<br/>'
                             + 'Кстати, для закрытия галереи Вы можете нажать клавищу Esc.', duration: 15000}});
                         ntf.render();
                         window.sessionStorage.setItem('lastKeysNotice', 20);
