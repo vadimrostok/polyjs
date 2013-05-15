@@ -64,25 +64,49 @@ class Album extends CActiveRecord
     public static function seizeFullData()
     {
         $db = Yii::app()->db;
-        $selectAlbumsSql = '
-            SELECT
-                `albums`.*
-            FROM
-                `albums`
-            WHERE 
-                `id`!=1
-            ORDER BY
-                `albums`.`created_at` DESC
-        ';
+        if(Yii::app()->user->isAdmin()) {
+            $selectAlbumsSql = '
+                SELECT
+                    `albums`.*
+                FROM
+                    `albums`
+                WHERE 
+                    `id`!=1
+                ORDER BY
+                    `albums`.`created_at` DESC
+            ';
+            $selectPicturesSql = '
+                SELECT
+                    `pictures`.*
+                FROM
+                    `pictures`
+                WHERE
+                    `status_id`!=' . Statuses::RELATED_PARENT_DELETED . '
+            ';
+        } else {
+            $selectAlbumsSql = '
+                SELECT
+                    `albums`.*
+                FROM
+                    `albums`
+                WHERE 
+                    `id`!=1
+                    AND `status_id`=' . Statuses::OK . '
+                ORDER BY
+                    `albums`.`created_at` DESC
+            ';
+            $selectPicturesSql = '
+                SELECT
+                    `pictures`.*
+                FROM
+                    `pictures`
+                WHERE
+                    `status_id`=' . Statuses::OK . '
+            ';
+        }
+        
         $albums = $db->createCommand($selectAlbumsSql)->queryAll();
-        $selectPicturesSql = '
-            SELECT
-                `pictures`.*
-            FROM
-                `pictures`
-            WHERE
-                `status_id`!=' . Statuses::RELATED_PARENT_DELETED . '
-        ';
+        
         $picturesByAlbumId = array();
         $pictures = $db->createCommand($selectPicturesSql)->queryAll();
         foreach($pictures as $picture) {
