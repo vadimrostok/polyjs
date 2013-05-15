@@ -13,4 +13,6 @@
     }
     ?>
     <link class="hide" rel="image_src" href="<?=$src ?>"/>
+<?php else : ?>
+    <link class="hide" rel="image_src" href="<?=Yii::app()->baseUrl . '/iconPicture.png' ?>"/>
 <?php endif ?>
