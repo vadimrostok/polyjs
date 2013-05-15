@@ -34,6 +34,7 @@
             };
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
+                'root': '<?=Yii::app()->baseUrl ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>',
                 'bay': '<?=$this->createUrl('controls/bay') ?>'
             };
@@ -70,6 +71,5 @@
         <div id="footer">
             <?=sprintf('%0.5f', Yii::getLogger()->getExecutionTime()) ?> sec.
         </div>
-        <div id="preload-box" class="hide"></div>
     </body>
 </html>

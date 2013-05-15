@@ -12,7 +12,7 @@ define([
                 if(initData['mode']) {
                     this.mode = initData['mode'];
                 }
-                //файл грузится с ФС клиента?
+                //Файл грузится с ФС клиента?
                 this.set('isLocal', (this.mode in {'upload-preview': true}));
                 if(this.mode == 'upload-preview') {
                     this.set('prefix', '');
@@ -36,20 +36,16 @@ define([
                 var pic_max_side = (this.get('file_info').width > this.get('file_info').height)? 
                     this.get('file_info').width
                     : this.get('file_info').height;
-                var prefix = '400_';
-                //выберем оптимальное разрешение!
-                if(win_width > 400 && pic_max_side > 400) {
+                var prefix = '200_';
+                //Выберем оптимальное разрешение!
+                if(win_width > 200 && pic_max_side > 200) {
                     if(pic_max_side < 1300) {
                         prefix = '';
                     } else {
                         prefix = '1300_';
                     }
                     if(win_width > 1300 && pic_max_side > 1300) {
-                        if(pic_max_side < 1300) {
-                            prefix = '';
-                        } else {
-                            prefix = '1700_';
-                        }
+                        prefix = '1700_';
                     }
                 }
                 this.set('prefix', prefix);

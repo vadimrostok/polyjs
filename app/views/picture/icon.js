@@ -31,7 +31,7 @@ define([
                 var prefix = '';
                 if(useBigPreviews == true) {
                     $(this.el).attr('class', 'picture bigPictureIcon');
-                    prefix = '400_';
+                    prefix = '200_';
                 } else {
                     $(this.el).attr('class', 'picture pictureIcon');
                     prefix = '100_';

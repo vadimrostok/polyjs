@@ -41,7 +41,6 @@ define([
                 this.toUploadFilesList = {};
             },
             uploadPictures: function() {
-
                 var that = this;
                 for(var i = 0; i < this.fileId; i++) {
                     if(!this.toUploadFilesList[i]) {
@@ -78,6 +77,26 @@ define([
                     xhr.open('POST', URLS.bay);
                     xhr.send(FD);
                 }
+            },
+            toggleMainPicture: function(id) {
+                var currentMainPicture = this.get('main_picture_id');
+                var successChangeMassage = '';
+                if(currentMainPicture == id) {
+                    this.set('main_picture_id', null);
+                    successChangeMassage = 'Теперь у альбома нет обложки';
+                } else {
+                    this.set('main_picture_id', id);
+                    successChangeMassage = 'Выбранное Вами изображение теперь является обложкой альбома.';
+                }
+                this.save({}, {
+                    success: function(data) {
+                        var ntf = new notification({modelAttrs: {text: successChangeMassage, duration: 5000}});
+                        ntf.render();
+                    },
+                    error: function() {
+                        app.log(arguments)
+                    }
+                });
             }
         });
 

@@ -35,8 +35,12 @@ define([
                     if(!album) {
                         return false;
                     }
-                    data.albums.views[aid].showDetails();
-                    data.pictures.views[aid][pid].showPicture();
+                    if(data.albums.views[aid]) {
+                        data.albums.views[aid].showDetails();
+                        if(data.pictures.views[aid][pid]) {
+                            data.pictures.views[aid][pid].showPicture();
+                        }
+                    }
                 }
                 if(data.albums.list.length < 1) {
                     data.albums.list.on('render:albums', f);

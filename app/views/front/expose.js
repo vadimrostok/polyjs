@@ -7,7 +7,7 @@ define([
     function(boilerplate, AlbumsList, albumView, exposeTmp){
         var expose = Backbone.View.extend({
             params: {},
-            id: 'adminControls',
+            id: 'expose',
             attributes: {
                 'class': 'hide'
             },

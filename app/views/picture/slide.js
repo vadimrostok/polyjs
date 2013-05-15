@@ -29,7 +29,8 @@ define([
                 window.mainRouter.navigate('album-' + this.model.get('album_id') + '/picture-' + this.model.get('id'));
             },
             preload: function() {
-                $(this.el).appendTo('#preload-box');
+                var image = new Image();
+                image.src = this.model.get('client_path') + this.model.get('prefix') + this.model.get('filename');
             }
         });
 

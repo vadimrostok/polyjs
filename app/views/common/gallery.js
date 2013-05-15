@@ -45,10 +45,12 @@ define([
                 'click .rolldown': 'cloudRolldownToggle',
                 'click .edit-comment': 'showEditPicture',
                 'click .delete': 'deletePicture',
+                'click .main-picture': 'toggleMainPicture'
             },
             initialize: function(data) {
                 this.selectedPictureModel = data['selectedPictureModel'];
                 this.preloaded = {};
+                //window.preloaded = this.preloaded;
                 this.on('change:picture', function() {
                     var model = this.selectedPictureModel;
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
@@ -191,9 +193,9 @@ define([
                 if(!isKeyPressed && window.sessionStorage) {
                     var lastKeysNotice = window.sessionStorage.getItem('lastKeysNotice');
                     if(!lastKeysNotice || lastKeysNotice < 1) {
-                        var ntf = new notification({modelAttrs: {text: 'Для перелистывания изображений очень удобно<br/>'
-                            + 'использовать клавиши управлений курсором.<br/>'
-                            + 'Кстати, для закрытия галереи Вы можете нажать клавищу Esc.', duration: 15000}});
+                        var ntf = new notification({modelAttrs: {text: 'Для перелистывания изображений удобно<br/>'
+                            + 'использовать клавиши управления курсором.<br/>'
+                            + 'Для закрытия галереи нажмите Esc.', duration: 30000}});
                         ntf.render();
                         window.sessionStorage.setItem('lastKeysNotice', 20);
                     } else {
@@ -284,6 +286,13 @@ define([
                     .find('#disqus_thread')
                     .appendTo($('#comments-box'));
                 $(this.el).find('.show-comments').text('Комментарии');
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = 'main';  
+                        this.page.url = 'http://shepi.poly-js.com/init';
+                    }
+                });
             },
             loadCommentsModule: function(uniqId) {
                 disqus_identifier = 'picture' + uniqId;
@@ -337,6 +346,10 @@ define([
                     });
                     var confirm = new confirmView({model: confirmData});
                 });
+            },
+            toggleMainPicture: function() {
+                var albumModel = data.albums.list.get(this.selectedPictureModel.get('album_id'));
+                albumModel.toggleMainPicture(this.selectedPictureModel.get('id'));
             }
         });
 

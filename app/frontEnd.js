@@ -16,7 +16,8 @@ var data = {
 
 requirejs.config({
     paths: {
-        jquery: '//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min',
+        //jquery: '//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min',
+        jquery: 'libs/jquery',
         
         //underscore: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min',
         //backbone: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min',
@@ -44,6 +45,12 @@ requirejs.config({
 
 progressBar(20);
 
+/*
+ * Я использовал название boilerplate, тогда я не правильно понял его значение.
+ * Время прошло, название boilerplate осталось.
+ * Смысл его в том, что в том модуле собраны jQuery, Backbone и Underscore, 
+ * которые используются в каждом другом модуле.
+ */
 require([
         'boilerplate',
         'views/front/expose',
@@ -83,12 +90,15 @@ require([
             this.getData = function() {return data;};
         });
 
+        //window.app уже установлен в layout, это необходимо т.к. 
+        //нужны некоторые динамические данные сгенерированные php.
         window.app = _.extend(window.app, app);
-
 
         window.mainRouter = new Workspace();
 
-        Backbone.history.start();
+        //pushState: true значит по возможности 
+        //изменения в url будут вносится без хэша(#)
+        Backbone.history.start({pushState: true, root: URLS.root});
 
         if(window.mainRouter.nothingWasRouted) {
         	window.mainRouter.navigate('init');

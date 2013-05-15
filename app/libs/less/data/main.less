@@ -6,82 +6,22 @@
 @grayLight: #999;
 @grayLighter: #eee;
 @grayLighter2: #bbb;
-
 @pictureBoxWidth: 100px;
-
-form input:focus, form select:focus {
+@albumBoxOuteerWidth: 220px;
+@red: #bd362f;
+@yellow: #fbb450;
+/*
+ * Не надо обводить поля этой желтой фигней!
+ */
+form input:focus, form select:focus, form button:focus {
     outline: none;
 }
 
-@red: #bd362f;
-@yellow: #fbb450;
-
-.red-color {
-    background-color: @red;
-}
-.yellow-color {
-    background-color: @yellow;
-}
-.light-color {
-    background-color: @grayLighter;
-}
-.dead-color {
-    background-color: #333333;
-}
-
-.smallBoxBounds (@side: 100px) {
-    max-height: @side;
-    max-width: @side;
-}
-
-.smallBox (@side: 200px) {
-    height: @side;
-    width: @side;
-}
-
-.smallMargin(@margin: 5px, @padding: 3px) {
-    margin: @margin;
-    padding: @padding;
-}
-
-.rounded-corners (@radius: 5px) {
-    border-radius: @radius;
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
-}
-
-.fluorescence (@blur: 2px, @overbound: 0px, @color: @blue) {
-    box-shadow: 0 0 @arguments;
-    -moz-box-shadow: 0 0 @arguments;
-    -webkit-box-shadow: 0 0 @arguments;
-}
-
-.dashed (@width: 2px, @color: @blue) {
-    border: @width dashed @color;
-}
-
-.dashed-border-style {
-    .fluorescence(100px, 0px, #fff);
-    .rounded-corners(5px);
-    .dashed;
-}
-
-.fullscreenfixed {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    top: 0;
-    left: 0;
-}
-
-.transparent-background(@color: @gray) {
-    .fullscreenfixed;
-    z-index: 1;
-    background-color: fadeout(@color, 50%);
-}
-
+/*
+ * Альбом. Универсальный блок. т.к. он содержит картинки он может 
+ * быть представлен в виде икоки (свернутый вид, 4 или 1 картинок видно) 
+ * или в развернутом виде(все картинки видны, блок по ширине 8 или 4 картинок).
+ */
 .album-wrapper {
     .previews {
         position: relative;
@@ -219,40 +159,9 @@ form input:focus, form select:focus {
         }
     }
 }
-
-.min-width100 {
-    min-width: 100px;
-}
-
-.padding(@what) {
-    padding: @what !important;
-}
-.padding10 {
-    .padding(10px);
-}
-.padding2 {
-    .padding(2px);
-}
-
-.rightAlign {
-    text-align: right;
-}
-
-.closefield {
-    cursor: pointer;
-}
-.bground {
-    .transparent-background;
-}
-.t-bground {
-    .transparent-background;
-    background-color: fadeout(#fff, 100%);
-}
-.bground-black {
-    .transparent-background;
-    background-color: #000;
-}
-/* do the "center" tip */
+/*
+ * CSS-style(полностью независим от JS) расположение блока посреди экрана.
+ */
 .center-background {
     .fullscreenfixed;
     display: table;
@@ -271,6 +180,9 @@ form input:focus, form select:focus {
     }
 }
 
+/*
+ * Задача - покрывать фиксированно пол экрана.
+ */
 .halfscreenfixed(@height: 100%, @width: 50%) {
     position: absolute;
     padding: 0;
@@ -280,6 +192,9 @@ form input:focus, form select:focus {
     width: @width;
 }
 
+/*
+ * Попап, внутри использует классы бутстрапа.
+ */
 .popup-wrapper {
     .center-background;
     z-index: 57;
@@ -295,7 +210,9 @@ form input:focus, form select:focus {
         }
     }
 }
-
+/*
+ * Блок подтвержения чего-либо, использует внутри классы бутстрапа.
+ */
 .confirm-wrapper {
     .center-background;
     z-index: 80;
@@ -312,6 +229,11 @@ form input:focus, form select:focus {
     }
 }
 
+/* 
+ * Впервые использовалось для стрелок переключения изображений в галерее, 
+ * блоки с этими классами над важним элементами с текстом, не позволяющие
+ * при нажатии на эти элементы случайно выделить текст.
+ */
 .no-select-pad {
     .fullscreenfixed;
     position: relative;
@@ -323,7 +245,9 @@ form input:focus, form select:focus {
 .no-select-block-pad {
     .fullscreenfixed;
 }
-
+/*
+ * Галарея- просмотр изображений на черном фоне.
+ */
 .gallery {
     .bground-black {
         z-index: 20;
@@ -396,6 +320,9 @@ form input:focus, form select:focus {
                         }
                     }
                 }
+                /*
+                 * Плавающая полупрозрачная менюшка на галерее.
+                 */
                 .cloud {
                     background-color: @grayLighter;
                     padding: 10px;
@@ -439,6 +366,9 @@ form input:focus, form select:focus {
                         }
                     }
                 }
+                /*
+                 * Класс для контейнера для DISQUS модуля.
+                 */
                 .comments {
                     background-color: #fff;
                     margin: 20px auto 0px auto;
@@ -452,7 +382,10 @@ form input:focus, form select:focus {
         }
     }
 }
-
+/*
+ * Не навящивое оповещение в правом верхнем углу экрана, 
+ * может быть несколько одновременно.
+ */
 .notification {
     background-color: #fff;
     position: fixed;
@@ -474,15 +407,10 @@ form input:focus, form select:focus {
     .dashed-border-style;
 }
 
-.bottom-dashed-border(@color: #aaa) {
-    border-bottom: 2px dashed @color;
-    padding-bottom: 5px;
-}
-
-.bottom-dashed-border-gray {
-    .bottom-dashed-border;
-}
-
+/*
+ * Родитальский блок для всего, что есть в админке.
+ * Классы описанные внутри используются только на бекенде.
+ */
 .controls {
     .menu-buttons {
         margin: 5px;
@@ -498,19 +426,134 @@ form input:focus, form select:focus {
         }
         
     }
-}
-
-.newpicture {
-    .input-mock-button {
-        position: relative;
-        .files {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+    .newpicture {
+        .input-mock-button {
+            position: relative;
+            .files {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+            }
         }
     }
+}
+/*
+ * Canvas для игр(экспериментов).
+ */
+#livebg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    z-index: 1000;
+    display:none;
+}
+
+#adminControls, #expose {
+    width: @albumBoxOuteerWidth * 4;
+}
+
+/*
+ * Далее вспомогательные классы, которые не хочу описывать.
+ */
+
+.red-color {
+    background-color: @red;
+}
+.yellow-color {
+    background-color: @yellow;
+}
+.light-color {
+    background-color: @grayLighter;
+}
+.dead-color {
+    background-color: #333333;
+}
+.smallBoxBounds (@side: 100px) {
+    max-height: @side;
+    max-width: @side;
+}
+.smallBox (@side: 200px) {
+    height: @side;
+    width: @side;
+}
+.smallMargin(@margin: 5px, @padding: 3px) {
+    margin: @margin;
+    padding: @padding;
+}
+.rounded-corners (@radius: 5px) {
+    border-radius: @radius;
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+}
+.fluorescence (@blur: 2px, @overbound: 0px, @color: @blue) {
+    box-shadow: 0 0 @arguments;
+    -moz-box-shadow: 0 0 @arguments;
+    -webkit-box-shadow: 0 0 @arguments;
+}
+.dashed (@width: 2px, @color: @blue) {
+    border: @width dashed @color;
+}
+.dashed-border-style {
+    .fluorescence(100px, 0px, #fff);
+    .rounded-corners(5px);
+    .dashed;
+}
+.bottom-dashed-border(@color: #aaa) {
+    border-bottom: 2px dashed @color;
+    padding-bottom: 5px;
+}
+.bottom-dashed-border-gray {
+    .bottom-dashed-border;
+}
+.fullscreenfixed {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+}
+.transparent-background(@color: @gray) {
+    .fullscreenfixed;
+    z-index: 1;
+    background-color: fadeout(@color, 50%);
+}
+.min-width100 {
+    min-width: 100px;
+}
+.padding(@what) {
+    padding: @what !important;
+}
+.padding10 {
+    .padding(10px);
+}
+.padding2 {
+    .padding(2px);
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.closefield {
+    cursor: pointer;
+}
+.bground {
+    .transparent-background;
+}
+.t-bground {
+    .transparent-background;
+    background-color: fadeout(#fff, 100%);
+}
+.bground-black {
+    .transparent-background;
+    background-color: #000;
 }

@@ -63,12 +63,12 @@ return array(
 				),
 				array(
 					'class'=>'CWebLogRoute',
-				),*/
+				),
 				'db' => array(
 					'class' => 'CWebLogRoute',
 					'categories' => 'system.db.CDbCommand',
 					'showInFireBug' => true
-				)
+				)*/
 			),
 		),
 		'clientScript'=>array(
