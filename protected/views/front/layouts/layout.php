@@ -23,8 +23,8 @@
 <?php else : ?>
         <link class="hide" rel="image_src" href="<?=Yii::app()->baseUrl . '/iconPicture.png' ?>"/>
 <?php endif ?>
-        <meta name="title" content="<?=$this->pageTitle ?>">
-        <meta name="description" content="<?=$this->pageDescription ?>">
+        <meta name="title" content='<?=$this->pageTitle ?>' />
+        <meta name="description" content='<?=$this->pageDescription ?>' />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
