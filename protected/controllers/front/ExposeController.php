@@ -5,6 +5,8 @@ class ExposeController extends Controller
     public $pageDescription = 'Shepi';
     public $defaultAction = 'list';
     public $layout = 'layout';
+    public $currentAlbum;
+    public $currentPicture;
 
     public function actionList()
     {
@@ -23,11 +25,12 @@ class ExposeController extends Controller
         }
         $this->pageTitle = 'Shepi. ' . $albumModel->title;
         $this->pageDescription = 'Shepi. Альбом \\"' . $albumModel->title . '\\". От ' . date('d.m.y', strtotime($albumModel->created_at)) . '.';
+        $this->currentAlbum = $albumModel;
         $this->render(
-            'list', 
+            'list'/*, 
             array(
                 'album' => $albumModel
-            )
+            )*/
         );
     }
 
@@ -45,12 +48,14 @@ class ExposeController extends Controller
         $this->pageTitle = 'Shepi. ' . $albumModel->title;
         $this->pageDescription = 'Shepi. Альбом \\"' . $albumModel->title . '\\". От ' . date('d.m.y', strtotime($albumModel->created_at))
          . '. Изображение ' . $pictureModel->id . ', дата создания: ' . date('d.m.y', strtotime($pictureModel->created_at)) . '.';
+        $this->currentAlbum = $albumModel;
+        $this->currentPicture = $pictureModel;
         $this->render(
-            'list',
+            'list'/*,
             array(
                 'album' => $albumModel,
                 'picture' => $pictureModel
-            )
+            )*/
         );
     }
 
