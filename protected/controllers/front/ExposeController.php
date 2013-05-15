@@ -23,8 +23,8 @@ class ExposeController extends Controller
         if(!$albumModel || $albumModel->status_id != Statuses::OK) {
             throw new CHttpException(404, 'No such data Shepi could found.');
         }
-        $this->pageTitle = 'Shepi. ' . $albumModel->title;
-        $this->pageDescription = "Shepi. Альбом \"" . $albumModel->title . "\". От " . date('d.m.y', strtotime($albumModel->created_at)) . '.';
+        $this->pageTitle = $albumModel->title;
+        $this->pageDescription = "\"" . $albumModel->title . "\"[*]~" . date('d.m.y', strtotime($albumModel->created_at)) . '. Shepi.';
         $this->currentAlbum = $albumModel;
         $this->render(
             'list'/*, 
@@ -45,9 +45,9 @@ class ExposeController extends Controller
         ) {
             throw new CHttpException(404, 'No such data Shepi could found.');
         }
-        $this->pageTitle = 'Shepi. ' . $albumModel->title;
-        $this->pageDescription = "Shepi. Альбом \"" . $albumModel->title . "\". От " . date('d.m.y', strtotime($albumModel->created_at))
-         . '. Изображение ' . $pictureModel->id . ', дата создания: ' . date('d.m.y', strtotime($pictureModel->created_at)) . '.';
+        $this->pageTitle = $albumModel->title;
+        $this->pageDescription = "\"" . $albumModel->title . "\""
+         . '[' . $pictureModel->id . ']~' . date('d.m.y', strtotime($pictureModel->created_at)) . '. Shepi.';
         $this->currentAlbum = $albumModel;
         $this->currentPicture = $pictureModel;
         $this->render(
