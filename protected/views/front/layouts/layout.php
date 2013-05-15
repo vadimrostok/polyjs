@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="icon" type="image/png" href="<?=Yii::app()->baseUrl ?>/favicon.png" />
+        <meta name="title" content="<?=$this->pageTitle ?>">
+        <meta name="description" content="<?=$this->pageDescription ?>">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,44 +19,46 @@
 
         <script type="text/javascript">
             /*
-             * Да, да, Вы можете переключить admin в true, что бы полюбоваться кнопочками и статусами "ОК"!
+             * Да, да, Вы можете переключить is_admin в true что бы полюбоваться кнопочками и статусами "ОК"!
              */
             var app = {
                 is_admin: false
             };
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
+                'root': '<?=Yii::app()->baseUrl ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>',
                 'bay': '<?=$this->createUrl('controls/bay') ?>'
             };
             var setatusTexts = {
-                <?php foreach(Statuses::model()->findAll() as $status) : ?>
-                    <?=$status->id ?>: '<?=$status->description ?>',
-                <?php endforeach ?>
+<?php       $allStatusColorClasses = '';
+            foreach(Statuses::model()->findAll() as $status) : 
+?>
+                <?=$status->id ?>: '<?=$status->description ?>',
+<?php       endforeach 
+?>
             };
-            <?php 
-            $allStatusColorClasses = '';
-            ?>
             var statusColorClasses = {
-                <?php foreach(Statuses::model()->findAll() as $status) : ?>
-                    <?=$status->id ?>: '<?=$status->color ?>-color',
-                    <?php 
-                    $allStatusColorClasses .= ' ' . $status->color;
-                    ?>
-                <?php endforeach ?>
+<?php       foreach(Statuses::model()->findAll() as $status) : 
+            $allStatusColorClasses .= ' ' . $status->color; 
+?>
+                <?=$status->id; ?>: '<?=$status->color ?>-color',
+<?php       endforeach;
+?>
+                //Параметр all нужен для того чтоб с элемента можно 
+                //было убодно снимать любой класс-цвет функцией removeClass.
                 all: '<?=$allStatusColorClasses ?>'
             };
             window.progressBar = function(prc) {
                 document.getElementById('mainProgressBar').style.width = prc + '%';
             }
         </script>
-
     </head>
     <body>
         <div class="container" id="page">
             <div class="loading">
                 <h1>Загрузка ♫♪</h1>
-                <h3>Подождите пожалуйста, Я экономлю на хостинге.</h3>
+                <h3>Подождите, пожалуйста, пока Я смахиваю пыль с альбомов.</h3>
                 <div class="progress progress-striped active">
                     <div class="bar" id="mainProgressBar" style="width: 0%;"></div>
                 </div>

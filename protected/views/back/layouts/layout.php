@@ -34,6 +34,7 @@
             };
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
+                'root': '<?=Yii::app()->baseUrl ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>',
                 'bay': '<?=$this->createUrl('controls/bay') ?>'
             };
