@@ -212,7 +212,7 @@ define([
                 //this.setSlider();
                 var index = _.indexOf(data.expandedAlbusViews, this.model.get('id'));
                 delete data.expandedAlbusViews[index];
-                //window.mainRouter.navigate('');
+                window.mainRouter.navigate('init');
                 this.state = 'icon';
             },
             showEdit: function() { 
