@@ -2,7 +2,7 @@
 class ExposeController extends Controller
 {
     public $pageTitle ='Shepi';
-    public $pageDescription = 'Shepi';
+    public $pageDescription = 'Тут хостятся фоточки.';
     public $defaultAction = 'list';
     public $layout = 'layout';
     public $currentAlbum;
@@ -24,7 +24,7 @@ class ExposeController extends Controller
             throw new CHttpException(404, 'No such data Shepi could found.');
         }
         $this->pageTitle = $albumModel->title;
-        $this->pageDescription = $albumModel->title . '[*]~' . date('d.m.y', strtotime($albumModel->created_at)) . '. Shepi.';
+        $this->pageDescription = $albumModel->title . ' ' . date('d.m.y', strtotime($albumModel->created_at)) . '.';
         $this->currentAlbum = $albumModel;
         $this->render(
             'list'/*, 
@@ -47,7 +47,7 @@ class ExposeController extends Controller
         }
         $this->pageTitle = $albumModel->title;
         $this->pageDescription = $albumModel->title
-         . '[' . $pictureModel->id . ']~' . date('d.m.y', strtotime($pictureModel->created_at)) . '. Shepi.';
+         . ' [' . $pictureModel->id . '] ' . date('d.m.y', strtotime($pictureModel->created_at)) . '.';
         $this->currentAlbum = $albumModel;
         $this->currentPicture = $pictureModel;
         $this->render(
