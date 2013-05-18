@@ -45,7 +45,11 @@ define([
                         prefix = '1300_';
                     }
                     if(win_width > 1300 && pic_max_side > 1300) {
-                        prefix = '1700_';
+                        if(pic_max_side < 1700) {
+                            prefix = '';
+                        } else {
+                            prefix = '1700_';
+                        }
                     }
                 }
                 this.set('prefix', prefix);
