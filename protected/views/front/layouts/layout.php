@@ -2,16 +2,25 @@
 <html lang="en">
     <head>
         <link rel="icon" type="image/png" href="<?=Yii::app()->baseUrl ?>/favicon.png" />
-<?php if(isset($this->currentPicture)) : 
+<?php 
+    /**
+     * В этом файле нарушены отступя для открывающий и закрывающих php тегов 
+     * для того, чтобы отступы сохранились при просмотре кода страницы в браузерах.
+     */
+    if(isset($this->currentPicture)) : 
     $picture = $this->currentPicture;
     $album = $this->currentAlbum;
 ?>
         <link class="hide" rel="image_src" href="<?=Yii::app()->baseUrl . $picture->client_path . '200_' . $picture->filename ?>"/>
 <?php elseif(isset($this->currentAlbum)) :
+        //Покажем ссылку на обложку альбома или изображение по данным указанным в GET параметре.
+        //(Для соц. сетей, например)
         $album = $this->currentAlbum;
         if(($album->main_picture_id && $picture = Picture::model()->findByPk($album->main_picture_id))
-            || $picture = Picture::model()->find('`album_id`=:aid AND `status_id`=:sts', array(':aid' => $album->id, ':sts' => Statuses::OK))) {
+            || $picture = Picture::model()->find('`album_id`=:aid AND `status_id`=:sts', array(':aid' => $album->id, ':sts' => Statuses::OK))) 
+        {
             $src = Yii::app()->baseUrl . $picture->client_path . '200_' . $picture->filename;
+            //Точно такой файл существует? Лучше подстраховаться, иначе будет хуже чем ничего.
             if(!is_file(YiiBase::getPathOfAlias('webroot') . $picture->client_path . '200_' . $picture->filename)) {
                 $src = Yii::app()->baseUrl . '/iconPicture.png';
             }
@@ -26,6 +35,7 @@
         <meta name="title" content='<?=$this->pageTitle ?>' />
         <meta name="description" content='<?=$this->pageDescription ?>' />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- Буков не много, пущай будет en -->
         <meta name="language" content="en" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -59,17 +69,8 @@
 <?php       endforeach 
 ?>
             };
-            var statusColorClasses = {
-<?php       foreach(Statuses::model()->findAll() as $status) : 
-            $allStatusColorClasses .= ' ' . $status->color; 
-?>
-                <?=$status->id; ?>: '<?=$status->color ?>-color',
-<?php       endforeach;
-?>
-                //Параметр all нужен для того чтоб с элемента можно 
-                //было убодно снимать любой класс-цвет функцией removeClass.
-                all: '<?=$allStatusColorClasses ?>'
-            };
+            //На фронте statusColorClasses не нужны.
+            var statusColorClasses = {all: ''};
             window.progressBar = function(prc) {
                 document.getElementById('mainProgressBar').style.width = prc + '%';
             }

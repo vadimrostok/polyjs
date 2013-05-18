@@ -7,7 +7,9 @@ define([
         'bootstrap'
     ], 
     function(boilerplate, pictureSlideView, galleryTmp, pictureCloudInfoTmp) {
-
+        /**
+         * Управление галереей клавишами.
+         */
         var handleKeyPressForGallsery = function(e) {
             var keyCode = e.keyCode;
             // 40 down
@@ -49,16 +51,17 @@ define([
             },
             initialize: function(data) {
                 this.selectedPictureModel = data['selectedPictureModel'];
+                //Предзагрузка изображений для удобства, тут будут 
+                //хранится вьюшки, сама загрузка запускается в модели picture.
                 this.preloaded = {};
-                //window.preloaded = this.preloaded;
                 this.on('change:picture', function() {
                     var model = this.selectedPictureModel;
                     $('.cloud .picture-info').html(_.template(pictureCloudInfoTmp, model.toJSON()));
                 }, this);
                 window.currentGallery = this;
-                $('#preload-box').html('');
             },
             remove: function() {
+                //Восстанавливаем скролл.
                 $('body').css({'overflow': 'auto'});
                 if(this.commentsOpened) {
                     this.hideComments();
@@ -74,7 +77,7 @@ define([
                 var that = this;
                 var picturesList = this.model.get('pictures');
                 var id = this.selectedPictureModel.get('id');
-                //можно таскать по экрану
+                //В галерее есть маленькая менюшка, её можно таскать по экрану.
                 $(this.el).find('.cloud').draggable({
                     containment: 'parent', 
                     cursor: 'move',
@@ -84,17 +87,18 @@ define([
                     stop: function() {
                         $(that.el).find('.cloud').css({'opacity': ''});
                         //запоминаем положение
-                        if(window.sessionStorage) {
+                        if(window.localStorage) {
                             var position = $(that.el).find('.cloud').offset();
-                            window.sessionStorage.setItem('galleryMenuPosition.left', position.left + 'px');
-                            window.sessionStorage.setItem('galleryMenuPosition.top', position.top + 'px');
+                            window.localStorage.setItem('galleryMenuPosition.left', position.left + 'px');
+                            window.localStorage.setItem('galleryMenuPosition.top', position.top + 'px');
                         }
                     },
                     cancel: '.btn'
                 });
-                if(window.sessionStorage) {
-                    var positionLeft = window.sessionStorage.getItem('galleryMenuPosition.left');
-                    var positionTop = window.sessionStorage.getItem('galleryMenuPosition.top');
+                //Восстанавливаем из памяти позиции менюшек.
+                if(window.localStorage) {
+                    var positionLeft = window.localStorage.getItem('galleryMenuPosition.left');
+                    var positionTop = window.localStorage.getItem('galleryMenuPosition.top');
                     if(parseInt(positionLeft) > $(window).width() - $(this.el).find('.cloud').width() 
                         || parseInt(positionTop) > $(window).height() - $(this.el).find('.cloud').height()) 
                     {
@@ -106,11 +110,11 @@ define([
                         if(positionLeft) {
                             $(this.el).find('.cloud').css({
                                 left: positionLeft, 
-                                top: window.sessionStorage.getItem('galleryMenuPosition.top')
+                                top: window.localStorage.getItem('galleryMenuPosition.top')
                             });
                         }
                     }
-                    var isRolldowned = window.sessionStorage.getItem('cloudrolldowned');
+                    var isRolldowned = window.localStorage.getItem('cloudrolldowned');
                     if(isRolldowned && isRolldowned == 'true') {
                         $(this.el).find('.rolldowned-menu').removeClass('hide');
                         $(this.el).find('.rolluped').addClass('hide');
@@ -119,32 +123,32 @@ define([
 
                 this.containerForPicture = $(this.el).find('.gallery-viewport');
 
-                //подгружаем несколько картинок сразу, и потом после каждого переключения картинок.
-                //чтоб в при переключении не было тормозов и при просмотре старых картинок не
-                //создавались новые модели
-                this.processPreload();
                 //сразу закидываем в загруженное
                 this.preloaded[id] = new pictureSlideView({
                     model: this.selectedPictureModel, 
                     container: this.containerForPicture
                 });
-                //основная картинка. модель найдена, рендерим
+                //Основная картинка. Модель найдена, рендерим.
                 this.selectedPictureView = this.preloaded[id];
                 this.selectedPictureView.render();
+                //Подгружаем несколько картинок сразу, и потом после каждого переключения картинок.
+                //Чтоб в при переключении не было тормозов и при просмотре старых картинок не
+                //создавались новые модели.
+                this.processPreload();
                 that.trigger('change:picture');
 
-                //прячем скролл 
+                //Прячем скролл.
                 $('body').css({'overflow': 'hidden'});
 
-                //прячем стрелки если всего 1 картинка
+                //Прячем стрелки если всего 1 картинка.
                 if(picturesList.length < 2)  {
                     this.$('.goright, .goleft').hide();
                 }
             },
-            processPreload: function() {
-                //надо чтоб картинка вставлялась в документ
+            processPreload: function(preloadCount) {
                 var picturesList = this.model.get('pictures');
                 var currentIndex = picturesList.indexOf(this.selectedPictureModel);
+                //Для предзагружаемой картинки.
                 var tmpModel;
                 var tmpIndex;
 
@@ -152,8 +156,9 @@ define([
                     return false;
                 }
 
-                var preloadNextItems = 2;
-                var preloadPrevItems = 2;
+                var preloadNextItems = preloadCount || 3;
+                var preloadPrevItems = preloadCount || 3;
+                //Подгружаем "вперед".
                 for(var i = 1; i <= preloadNextItems; i++) {
                     tmpIndex = (!picturesList.at(currentIndex + i))? -1: currentIndex;
                     tmpModel = picturesList.at(tmpIndex + i);
@@ -164,7 +169,7 @@ define([
                         });
                     }
                 }
-
+                //Подгружаем "назад".
                 for(var i = 1; i <= preloadPrevItems; i++) {
                     if(!picturesList.at(currentIndex - i)) {
                         tmpIndex = picturesList.length;
@@ -189,48 +194,47 @@ define([
                 this.move(-1);
             },
             move: function(step, isKeyPressed) {
-
-                if(!isKeyPressed && window.sessionStorage) {
-                    var lastKeysNotice = window.sessionStorage.getItem('lastKeysNotice');
+                //Показываем совет, что удобно использовать клавиши.
+                if(!isKeyPressed && window.localStorage) {
+                    var lastKeysNotice = window.localStorage.getItem('lastKeysNotice');
                     if(!lastKeysNotice || lastKeysNotice < 1) {
                         var ntf = new notification({modelAttrs: {text: 'Для перелистывания изображений удобно<br/>'
                             + 'использовать клавиши управления курсором.<br/>'
                             + 'Для закрытия галереи нажмите Esc.', duration: 30000}});
                         ntf.render();
-                        window.sessionStorage.setItem('lastKeysNotice', 20);
+                        window.localStorage.setItem('lastKeysNotice', 200);
                     } else {
-                        window.sessionStorage.setItem('lastKeysNotice', lastKeysNotice - 1);
+                        window.localStorage.setItem('lastKeysNotice', lastKeysNotice - 1);
                     }
-                } else if(isKeyPressed && window.sessionStorage) {
-                    window.sessionStorage.setItem('lastKeysNotice', 200);
+                } else if(isKeyPressed && window.localStorage) {
+                    window.localStorage.setItem('lastKeysNotice', 2000);
                 }
                 var that = this;
                 var picturesList = that.model.get('pictures');
                 var currentIndex = picturesList.indexOf(that.selectedPictureModel);
 
                 if(picturesList.length == 1) {
-                    //нечего листать, всего 1 картинка уже открыта
+                    //Нечего листать, всего 1 картинка уже открыта.
                     that.trigger('break:onepic');
                     return false;
                 }
 
                 if(!picturesList.at(currentIndex + step)) {
                     if(currentIndex + step < 0) {
-                        //выход за левую границу
-                        //чтоб следующий индекс был 0
+                        //Выход за левую границу.
+                        //Чтоб следующий индекс был 0.
                         currentIndex = picturesList.length;
                     } else {
-                        //выход за правую границу
+                        //Выход за правую границу.
                         currentIndex = - 1;
                     }
                     that.trigger('change:newlap');
                 }
 
                 that.selectedPictureModel = picturesList.at(currentIndex + step);
-                //console.log(that.selectedPictureModel)
                 that.trigger('change:picture');
 
-                $(that.el).find('.gallery-viewport .picture').remove();
+                that.selectedPictureView.remove();
 
                 if(that.preloaded[that.selectedPictureModel.get('id')]) {
                     that.selectedPictureView = that.preloaded[that.selectedPictureModel.get('id')];
@@ -249,22 +253,28 @@ define([
                     this.loadCommentsModule();
                 }
             },
+            /**
+             * Свернуть/развернуть плавающую менюшку в галерее.
+             */
             cloudRolldownToggle: function() {
                 var isRolldowned = 'false';
                 if($(this.el).find('.rolldowned-menu').is(':visible')) {
-                    //развернуть
+                    //Развернуть.
                     $(this.el).find('.rolldowned-menu').addClass('hide');
                     $(this.el).find('.rolluped').removeClass('hide');
                 } else {
-                    //свернуть
+                    //Свернуть.
                     isRolldowned = 'true';
                     $(this.el).find('.rolldowned-menu').removeClass('hide');
                     $(this.el).find('.rolluped').addClass('hide');
                 }
-                if(window.sessionStorage) {
-                    window.sessionStorage.setItem('cloudrolldowned', isRolldowned);
+                if(window.localStorage) {
+                    window.localStorage.setItem('cloudrolldowned', isRolldowned);
                 }
             },
+            /**
+             * Свернуть/развернуть комментарии.
+             */
             commentsToggle: function() {
                 if(this.commentsOpened) {
                     this.hideComments();
@@ -277,6 +287,10 @@ define([
                 }
                 this.commentsOpened = !this.commentsOpened;
             },
+            /**
+             * Эта ф-ия выделена из предидущей т.к. комментарии 
+             * надо восстанавливать при закрытии галереи.
+             */
             hideComments: function() {
                 $('.hypercomments-script').remove();
                 $(this.el).find('#hypercomments_widget').html('');
@@ -294,6 +308,9 @@ define([
                     }
                 });
             },
+            /**
+             * Перезагрузить модуль комментариев для нужной страницы(фотографии).
+             */
             loadCommentsModule: function(uniqId) {
                 disqus_identifier = 'picture' + uniqId;
                 disqus_title = 'Picture';
@@ -306,6 +323,9 @@ define([
                     }
                 });
             },
+            /**
+             * Показать вьюшку редактирования изображения.
+             */
             showEditPicture: function() {
                 var that = this;
                 require(['views/common/popup', 'views/picture/edit'], function(popupView, editPictureView) {
@@ -347,6 +367,9 @@ define([
                     var confirm = new confirmView({model: confirmData});
                 });
             },
+            /**
+             * Сделать текущее изображение обложкой текущего альбома.
+             */
             toggleMainPicture: function() {
                 var albumModel = data.albums.list.get(this.selectedPictureModel.get('album_id'));
                 albumModel.toggleMainPicture(this.selectedPictureModel.get('id'));

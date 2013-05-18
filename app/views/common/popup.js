@@ -4,6 +4,7 @@ define([
     ], 
     function(boilerplate, popupTmp) {
         var popupWin = Backbone.View.extend({
+            params: {},
             attributes: {
                 'class': 'popup-wrapper'
             },
@@ -14,12 +15,9 @@ define([
                 if(initData['innerView']) {
                     this.innerView = initData['innerView'];
                 }
-                if(!this.model) {
-                    this.model = new (Backbone.Model.extend({}));
-                }
             },
             render: function() {
-                $(this.el).html(_.template(popupTmp, this.model.toJSON()));
+                $(this.el).html(_.template(popupTmp, this.params));
                 if(this.innerView) {
                     this.innerView.render($(this.el).find('.content'));
                 }

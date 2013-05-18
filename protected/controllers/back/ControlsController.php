@@ -36,10 +36,7 @@ class ControlsController extends Controller
 
     public function actionAdmin()
     {
-        $params = array(
-            'albums' => array()//Album::seizeFullData(/*with pictures?yeeeeees*/)
-        );
-        $this->render('admin', $params);
+        $this->render('admin');
     }
 
     public function actionIndex()
@@ -64,6 +61,11 @@ class ControlsController extends Controller
         $this->render('auth', array('model' => $model));
     }
 
+    /*
+     * Принимает изображения, есть функционал создания нового альбома
+     * (если не передан id альбома), но пока не используется. Основная 
+     * логика обработки изображений начинается в AlbumPictures::handlePostPictures.
+     */
     public function actionBay()
     {
         $response = array();

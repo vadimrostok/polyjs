@@ -1,7 +1,13 @@
 <?php
+//TODO: Перевести в DAO!
+
+//У модели может быть поле protected_from_client_attributes, в котором будут
+//перечислены поля, которые не надо изметь через REST. Дело в том, что Backbone 
+//отправляет на сервер всю модель, некоторые поля изменяются на фронте 
+//для удобства отображения, в БД их изменять не нужно.
+
 class Rest
 {    
-    //translate into dao
     public static function _list($model)
     {
         $data = $model->findAll();
@@ -21,7 +27,7 @@ class Rest
         } else {
             self::releseResponse(
                 404,
-                CJSON::encode(array('errorText' => 'No Item found with id ' . (int)$id))
+                CJSON::encode(array('errorText' => 'No Item was found with id ' . (int)$id))
             );
         }
     }
@@ -54,7 +60,7 @@ class Rest
         if(!isset($model)) {
             self::releseResponse(
                 404,
-                CJSON::encode(array('errorText' => 'No Item found with id ' . (int)$id))
+                CJSON::encode(array('errorText' => 'No Item was found with id ' . (int)$id))
             );
             return false;
         }
@@ -138,7 +144,7 @@ class Rest
 
     public static function releseResponse($status = 200, $body = '', $content_type = 'text/html')
     {
-        $codes = Array(
+        $codes = array(
             200 => 'OK',
             400 => 'Bad Request',
             401 => 'Unauthorized',

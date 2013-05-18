@@ -36,6 +36,9 @@ define([
                     newAlbum: this.newAlbumModel
                 });
             },
+            /*
+             * Загружает все альбомы и картинки с сервера.
+             */
             fetchAlbums: function() {
                 data.albums.list = new AlbumsList();
                 var that = this;
@@ -84,7 +87,7 @@ define([
                     success: function() {
                         var ntf = new notification({modelAttrs: {text: 'Новый альбом сохранен успешно.', duration: 5000}});
                         ntf.render();
-
+                        //Обновляем.
                         that.fetchAlbums();
                         that.render();
                         that.setNewAlbumModel();
@@ -92,6 +95,9 @@ define([
                 });
                 return false;
             },
+            /**
+             * Новый альбом не прохдит валидацию? Показать в чем проблема.
+             */
             newAlbumErrorHandler: function(model, error, options) {
                 var field = $(this.el).find('.newalbum .model-field[field=' + error.field + ']');
                 field.attr('required', 'true');
@@ -100,6 +106,7 @@ define([
                 ntf.render();
             }
         }
+        //Про OpenHide описание находится в самом модуле OpenHide.
         return Backbone.View.extend(_.extend(OpenHide, controls));
     }
 );

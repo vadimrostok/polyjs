@@ -1,14 +1,6 @@
 <?php
-/**
- * Controller is the customized base controller class.
- * All controller classes for this application should extend from this base class.
- */
 class Controller extends CController
 {
-    /**
-     * @var string the default layout for the controller view. Defaults to '//layouts/column1',
-     * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
-     */
     public $layout = '//layouts/layout';
     public $breadcrumbs = array();
 
@@ -16,12 +8,6 @@ class Controller extends CController
     {
         parent::init();
         
-        //Yii::app()->getClientScript()->registerCoreScript('jquery');
-        //underscore
-        //Yii::app()->getClientScript()->registerScriptFile('//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
-        //backbone
-        //Yii::app()->getClientScript()->registerScriptFile('//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js');
-
         if(!isset($_SESSION)) {
             session_start();
         }
@@ -41,7 +27,8 @@ class Controller extends CController
         return $output;
     }
 
-    public static function relesePath($fullPath) {
+    public static function relesePath($fullPath) 
+    {
         $pathToFile = pathinfo($fullPath);
         $pathToFile = $pathToFile['dirname'];
         if(!is_dir($pathToFile)) {
@@ -50,7 +37,8 @@ class Controller extends CController
         return $fullPath;
     }
 
-    public static function json($obj) {
+    public static function json($obj) 
+    {
         $obj['executionTime'] = sprintf('%0.5f', Yii::getLogger()->getExecutionTime());
         echo CJSON::encode($obj);
     }
@@ -62,7 +50,8 @@ class Controller extends CController
         }
     }
 
-    public function actionLogout() {
+    public function actionLogout() 
+    {
         Yii::app()->user->logout();
     }
 }

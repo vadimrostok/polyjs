@@ -31,18 +31,18 @@
         <script type="text/javascript">
             var app = {
                 is_admin: true
-            };
+            }
             var URLS = {
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
                 'root': '<?=Yii::app()->baseUrl ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>',
                 'bay': '<?=$this->createUrl('controls/bay') ?>'
-            };
+            }
             var setatusTexts = {
                 <?php foreach(Statuses::model()->findAll() as $status) : ?>
                     <?=$status->id ?>: '<?=$status->description ?>',
                 <?php endforeach ?>
-            };
+            }
             <?php 
             $allStatusColorClasses = '';
             ?>
@@ -54,7 +54,7 @@
                     ?>
                 <?php endforeach ?>
                 all: '<?=$allStatusColorClasses ?>'
-            };
+            }
             window.progressBar = function(prc) {
                 document.getElementById('mainProgressBar').style.width = prc + '%';
             }

@@ -11,7 +11,7 @@ class AdminIdentity extends CUserIdentity
             ->read();
         if(!isset($user)) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
-        } elseif(md5($user['salt'] . $this->password) !== $user['password']) {
+        } elseif(md5($user['salt'] . $this->password) !== trim($user['password'])) {
             $this->errorCode = self::ERROR_PASSWORD_INVALID;
         } else {
             $this->errorCode = self::ERROR_NONE;

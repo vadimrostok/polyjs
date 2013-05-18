@@ -1,6 +1,3 @@
-/**
-сделай фон альбома в зависимости от статуса
-*/
 define([
         'boilerplate',
         'models/picture',
@@ -9,17 +6,23 @@ define([
         'bootstrap'
     ], 
     function(boilerplate, pictureModel, pictureView, albumTmp) {
-        if(!data.expandedAlbusViews) {
-            data.expandedAlbusViews = [];
+        //Тут хранится последний раскрытый альбом. Для того, чтоб этот альбом 
+        //закрылся, если юзер откроет новый нольбом не закрывая этот.
+        if(!data.expandedAlbumView) {
+            data.expandedAlbumView = false;
         }
-        window.de = data.expandedAlbusViews;
         var album = Backbone.View.extend({
-            state: 'icon', 
+            //"Состяние" альбома, может быть в виде иконки и в развернутом виде.
+            state: 'icon',
+            //Высота блока со всем превьюшками.
             previewsHeight: 0,
             useBigPreviews: null,
             sliderInterval: null,
+            //Для альбома в виде иконки сколько рендерить првьюшек?
             previewPicturesCount: 10,
+            //А сколько вышло? А то может быть в альбоме меньше 10-и картинок.
             previewPicturesRendered: 0,
+            //Выставляется после раскрытия альбома или если в альбоме меньше 10-и превьюшек.
             allPreviewPicturesRendered: false,
             renderedOnce: false,
             attributes: {
@@ -40,6 +43,7 @@ define([
                     this.container = data.container;
                 }
                 $(this.el).attr('album_id', this.model.get('id'));
+                //К модели альбома прикреплены все можели его изображений.
                 if(this.model.get('pictures')) {
                     $(this.el).attr('pictures_count', this.model.get('pictures').length);
                 } else {
@@ -53,8 +57,8 @@ define([
             },
             render: function(reRenderPictures, detailsMode, useBigPreviews) {
                 this.previewPicturesRendered = 0;
-                var that = this;
                 var id = this.model.get('id');
+                //Размер иконок может быть предустановлен в админке.
                 var icon_size = this.model.get('icon_size');
                 var previewHeight = 100;
                 if(typeof useBigPreviews == 'undefined' && this.useBigPreviews) {
@@ -73,6 +77,8 @@ define([
                 if(!this.renderedOnce && !reRenderPictures && this.container) {
                     this.container.append(this.el);
                 }
+                //Это для админки разноцветные фоны у альбомов. 
+                //Цвет фона в зависимости от статуса.
                 $(this.el).find('.album')
                     .removeClass(statusColorClasses.all)
                     .addClass(statusColorClasses[this.model.get('status_id')]);
@@ -96,7 +102,7 @@ define([
                                     model: pictures.at(i), 
                                     container: this.$('.previews')
                                 });
-                            data.pictures.views[id][pictures.at(i).get('id')].render(/*use big previews?no*/useBigPreviews);
+                            data.pictures.views[id][pictures.at(i).get('id')].render(useBigPreviews);
                             this.previewPicturesRendered++;
                         }
                     }
@@ -108,16 +114,19 @@ define([
                     $(this.el).find('.previews').css({height: this.previewsHeight + 'px'});
                 }
                 this.renderedOnce = true;
-                
-                //this.setSlider();
             },
+            /*
+             * Не спеша спролистаем превьюшки в альбоме-иконке.
+             */
             runSlider: function() {
                 var that = this;
                 var top, height, pictureHeight;
                 var viewPortHeight = 200;
+                //Эффект непредсказуемости.
                 if(Math.random() > 0.5) {
                     return true;
                 }
+                //Эффект непредсказуемости в квадрате.
                 setTimeout(function() {
                     $(that.el).find('.previews').each(function(index, element) {
                         if($(that).hasClass('albumDetails')) {
@@ -134,40 +143,18 @@ define([
                     });
                 }, Math.random()*5000);
             },
-            /*setSlider: function() {
-                var that = this;
-                var top, height, pictureHeight;
-                var viewPortHeight = 200;
-                setTimeout(function() {
-                    that.sliderInterval = setInterval(function() {
-                        $(that.el).find('.previews').each(function(index, element) {
-                            if($(that).hasClass('albumDetails')) {
-                                return 1;
-                            }
-                            top = parseInt($(element).css('top')) || 0;
-                            pictureHeight = $(element).find('.picture').outerHeight();
-                            height = $(element).innerHeight();
-                            if(-top < height - viewPortHeight && height > $(element).parent().height()) {
-                                //$(element).css({top: top - pictureHeight - 6 + 'px'});
-                                $(element).animate({top: top - pictureHeight - 6 + 'px'}, 1000);
-                            } else {
-                                $(element).css({top: '0px'});
-                            }
-                        });
-                    }, Math.random()*5000 + 5000);
-                }, Math.random()*5000);
-            },*/
             unsetSlider: function() {
                 $(this.el).find('.previews').stop(true, true);
                 $(this.el).find('.previews').css({top: '0px'});
                 clearInterval(this.sliderInterval);
             },
+            /*
+             * Разворачивает альбом. Из иконки в попап.
+             */
             showDetails: function() {
                 var id = this.model.get('id');
-                for(var i = 0; i < data.expandedAlbusViews.length; i++) {
-                    if(data.expandedAlbusViews[i]) {
-                        data.albums.views[data.expandedAlbusViews[i]].hideDetails();
-                    }
+                if(data.expandedAlbumView) {
+                    data.expandedAlbumView.hideDetails();
                 }
                 var scrollTop = $(window).scrollTop() + 50;
                 $(this.el)
@@ -195,10 +182,13 @@ define([
                 }
                 $(this.el).find('.previews').css({'height': 'auto'});
                 this.unsetSlider();
-                data.expandedAlbusViews.push(id);
+                data.expandedAlbumView = this;
                 window.mainRouter.navigate('album-' + id);
                 this.state = 'details';
             },
+            /*
+             * Соответственно сворачивает. Из попапа в иконку.
+             */
             hideDetails: function() {
                 //this.model.clearToUploadFileList();
                 $(this.el)
@@ -209,12 +199,12 @@ define([
                     .find('.album-title').show();
                 $(this.el).find('.bground').addClass('hide');
                 $(this.el).find('.previews').css({'height': this.previewsHeight + 'px'});
-                //this.setSlider();
-                var index = _.indexOf(data.expandedAlbusViews, this.model.get('id'));
-                delete data.expandedAlbusViews[index];
                 window.mainRouter.navigate('init');
                 this.state = 'icon';
             },
+            /*
+             * Отобразить вьюшку редактирования альбома.
+             */
             showEdit: function() { 
                 var that = this;
                 require(['views/common/popup', 'views/album/edit'], function(popupView, editAlbumView) {
@@ -224,10 +214,10 @@ define([
                 });
             },
             handleFilesAdd: function(e) {
-                var files = e.target.files; // FileList object
+                var files = e.target.files;
                 var filesAddedCount = 0;
 
-                // Loop through the FileList and render image files as thumbnails.
+                // Показать превьюшки.
                 for (var i = 0, f; f = files[i]; i++) {
                     if (!f.type.match('image.*')) {
                         continue;

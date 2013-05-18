@@ -83,8 +83,9 @@ require([
             this.getData = function() {return data;};
         });
 
+        //window.app уже установлен в layout, это необходимо т.к. 
+        //нужны некоторые динамические данные сгенерированные php.
         window.app = _.extend(window.app, app);
-
 
         window.mainRouter = new Workspace();
 

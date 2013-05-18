@@ -60,7 +60,9 @@ class Album extends CActiveRecord
         return parent::beforeDelete();
     }
 
-    //For JSON representation
+    /*
+     * Возвращает все фото внутри всех альбомов.
+     */
     public static function seizeFullData()
     {
         $db = Yii::app()->db;
@@ -117,12 +119,14 @@ class Album extends CActiveRecord
             }
             $picturesByAlbumId[$picture['album_id']][] = $picture;
         }
+
         foreach($albums as $key => $album) {
             $albums[$key]['created_at'] = date('d.m.y', strtotime($albums[$key]['created_at']));
             $albums[$key]['pictures'] = isset($picturesByAlbumId[$album['id']])? 
                 $picturesByAlbumId[$album['id']]
                 : array();
         }
+        
         return $albums;
     }
 }

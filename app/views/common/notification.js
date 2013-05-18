@@ -31,7 +31,7 @@ define([
                 notifications[this.notificationId] = this;
             },
             remove: function() {
-                //если есть другие оповещения то их надо поднять повыше
+                //Если есть другие оповещения то их надо поднять повыше.
                 for(var i = 0; i <= notificationsCounter; i++) {
                     if(i < this.notificationId && notifications[i]) {
                         notifications[i].heft($(this.el).height() + this.padding);
@@ -61,19 +61,21 @@ define([
                 this.isShowing = true;
                 var that = this;
                 this.timeoutObject = setTimeout(function() {
-                    //а может уже крестиком remove-нули?
+                    //А вдруг уже крестиком remove-нули?
                     if(notifications[that.notificationId]) {
                         that.remove();
                     }
                 }, this.model.get('duration'));
             },
+            //Вниз!
             sink: function(px) {
                 $(this.el).css({top: $(this.el).offset().top + px + 'px'});
             },
+            //Вверх!
             heft: function(px) {
                 $(this.el).css({top: $(this.el).offset().top - px + 'px'});
-                //console.log('helt ' + px);
             },
+            //Фабрика :)
             createModel: function(initData) {
                 if(!initData) {
                     initData = {};

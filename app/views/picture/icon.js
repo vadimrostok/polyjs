@@ -15,9 +15,11 @@ define([
                 }
             },
             remove: function(e) {
+                //Надо остановить "всплывание", а то альбом-хост так же удаляется.
                 if(e) {
                     e.stopPropagation();
                 }
+                //Случай для картинки - превью во время загрузки новых изображений.
                 if(this.model.mode == 'upload-preview') {
                     if($(this.el).parent().find('.picture').length == 1) {
                         $(this.el).parent().parent().find('.upload').addClass('hide');
@@ -36,6 +38,7 @@ define([
                     $(this.el).attr('class', 'picture pictureIcon');
                     prefix = '100_';
                 }
+                //Превью во время загрузки новых изображений: не нужно добавлять префикс.
                 if(this.model.get('isLocal') != true) {
                     this.model.set('icon_prefix', prefix);
                 } else {
