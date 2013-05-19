@@ -1,5 +1,5 @@
 <?php
-class AlbumPictures extends CModelBase
+class AlbumPictures extends CFormModel
 {
     const SAVEDIR = '/data/pictures';
 

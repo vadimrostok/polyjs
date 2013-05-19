@@ -9,12 +9,12 @@
         
         <link href="<?=Yii::app()->request->baseUrl ?>/app/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/libs/less/data/main.less?<?=microtime() ?>">
+        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/style/main.less">
         <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
 
         <?php if(defined('UNIT_TEST')) : ?>
             <link rel="stylesheet" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/test/lib/jasmine/jasmine.css">
-            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/test/threshold" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
+            <script data-main="<?=Yii::app()->request->baseUrl ?>/app/test/testEnd" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
             <style type="text/css">
                 #HTMLReporter {
                     margin: 10px;
@@ -36,7 +36,8 @@
                 'base': '<?=$_SERVER['SCRIPT_NAME'] ?>',
                 'root': '<?=Yii::app()->baseUrl ?>',
                 'picBase': '<?=Yii::app()->baseUrl ?>',
-                'bay': '<?=$this->createUrl('controls/bay') ?>'
+                'bay': '<?=$this->createUrl('controls/bay') ?>',
+                'saveOrder': '<?=$this->createUrl('controls/saveOrder') ?>',
             }
             var setatusTexts = {
                 <?php foreach(Statuses::model()->findAll() as $status) : ?>

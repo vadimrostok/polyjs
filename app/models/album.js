@@ -1,11 +1,14 @@
 define([
         'boilerplate',
         'collections/pictures',
+        'views/picture/icon',
+        'models/picture',
     ], 
-    function(boilerplate, PicturesList) {
+    function(boilerplate, PicturesList, pictureView, pictureModel) {
         var AlbumModel = Backbone.Model.extend({
             //просто счетчик
             fileId: 0,
+            previewHeight: 0,
             toUploadFilesList: {},
             toUploadFileViews: {},
             urlRoot: URLS.base + '/rest/album',
@@ -38,6 +41,44 @@ define([
             },
             clearToUploadFileList: function() {
                 this.toUploadFilesList = {};
+            },
+            handleFilesAdd: function(e, view) {
+                var files = e.target.files;
+                var filesAddedCount = 0;
+
+                // Показать превьюшки.
+                for (var i = 0, f; f = files[i]; i++) {
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+                    filesAddedCount++;
+                    this.addFileToUpload(f);
+                    var reader = new FileReader();
+                    // - 1 т.к. fileId инкрементируется ПОСЛЕ использования в качестве индекса в ф-ии addFileToUpload
+                    reader.fileId = this.fileId - 1;
+                    reader.onload = (function(file, parentView, pictureModel, pictureView) {
+                        return function(e) {
+                            var model = new pictureModel({
+                                src: e.target.result,
+                                comment: file.name,
+                                fileId: this.fileId,
+                                albumModel: parentView.model,
+                                //не будет обработки src специфичной для картинок с сервера
+                                local: true,
+                                mode: 'upload-preview'
+                            });
+                            var view = new pictureView({
+                                model: model, 
+                                container: parentView.$('.uploaded-files'),
+                                parentView: parentView
+                            });
+                            parentView.model.toUploadFileViews[this.fileId] = view;
+                            view.render();
+                        };
+                    })(f, view, pictureModel, pictureView);
+                    reader.readAsDataURL(f);
+                }
+                return filesAddedCount;
             },
             uploadPictures: function() {
                 var that = this;
@@ -101,6 +142,30 @@ define([
                         app.log(arguments)
                     }
                 });
+            },
+            /**
+             * Установить рамер превьюшек. На него влияют параметр icon_size из модели, 
+             * поле useBigPreviews во вьюшке, параметр useBigPreviews передаваемый в render вьюшки.
+             */
+            resolvePreviewsSize: function(view_useBigPreviews, useBigPreviews) {
+                var icon_size = this.get('icon_size');
+                var previewHeight = 100;
+                //Установлено useBigPreviews в объекте вьюшки?
+                if(typeof useBigPreviews == 'undefined' && view_useBigPreviews) {
+                    useBigPreviews = view_useBigPreviews;
+                }
+                //Есть данные из БД.
+                if(icon_size > 0) {
+                    useBigPreviews = (icon_size == 100)? false: true;
+                    previewHeight = icon_size;
+                } else if(useBigPreviews == true) {
+                    previewHeight = 400;
+                } else {
+                    useBigPreviews = false;
+                }
+
+                this.previewHeight = previewHeight;
+                return useBigPreviews;
             }
         });
 

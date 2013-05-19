@@ -94,4 +94,17 @@ class ControlsController extends Controller
         }
         $this->json($response);
     }
+    /**
+     * Сохраняет порядок изображений в альбоме.
+     */
+    public function actionSaveOrder()
+    {
+        if(Yii::app()->user->isAdmin()) {
+            $i = 1;
+            foreach($_POST['ids'] as $id) {
+                $sql = 'UPDATE `pictures` SET `position`=' . $i++ . ' WHERE `id`=' . (int)$id . ';';
+                Yii::app()->db->createCommand($sql)->execute();
+            }
+        }
+    }
 }

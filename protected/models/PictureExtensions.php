@@ -1,5 +1,5 @@
 <?php
-class PictureExtensions extends CModelBase
+class PictureExtensions extends CFormModel
 {
     const JPG = 1;
     const PNG = 2;

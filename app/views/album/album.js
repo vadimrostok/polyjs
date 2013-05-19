@@ -3,7 +3,8 @@ define([
         'models/picture',
         'views/picture/icon',
         'libs/require/text!templates/album/album.html',
-        'bootstrap'
+        'bootstrap',
+        'jqueryui'
     ], 
     function(boilerplate, pictureModel, pictureView, albumTmp) {
         //Тут хранится последний раскрытый альбом. Для того, чтоб этот альбом 
@@ -35,7 +36,8 @@ define([
                 'click .close, .closefield': 'hideDetails',
                 'change .files': 'handleFilesAdd',
                 'mouseout .album-title': 'runSlider',
-                'click .upload': function() {this.model.uploadPictures();}
+                'click .upload': function() {this.model.uploadPictures();},
+                'click .saveOrder': 'saveOrder'
             },
             initialize: function(data) {
                 data = data || {};
@@ -51,6 +53,9 @@ define([
                 }
             },
             remove: function() {
+                if(app.is_admin) {
+                    $(this.el).find('.previews').sortable('destroy');
+                }
                 clearInterval(this.sliderInterval);
                 this.renderedOnce = false;
                 $(this.el).remove();
@@ -58,21 +63,9 @@ define([
             render: function(reRenderPictures, detailsMode, useBigPreviews) {
                 this.previewPicturesRendered = 0;
                 var id = this.model.get('id');
+
                 //Размер иконок может быть предустановлен в админке.
-                var icon_size = this.model.get('icon_size');
-                var previewHeight = 100;
-                if(typeof useBigPreviews == 'undefined' && this.useBigPreviews) {
-                    useBigPreviews = this.useBigPreviews;
-                }
-                if(icon_size > 0) {
-                    useBigPreviews = (icon_size == 100)? false: true;
-                    previewHeight = icon_size;
-                } else if(useBigPreviews == true) {
-                    previewHeight = 400;
-                } else {
-                    useBigPreviews = false;
-                }
-                this.useBigPreviews = useBigPreviews;
+                this.useBigPreviews = useBigPreviews = this.model.resolvePreviewsSize(this.useBigPreviews, useBigPreviews);
                 $(this.el).html(_.template(albumTmp, this.model.toJSON()));
                 if(!this.renderedOnce && !reRenderPictures && this.container) {
                     this.container.append(this.el);
@@ -107,13 +100,17 @@ define([
                         }
                     }
                 }
-                this.previewsHeight = (this.previewPicturesRendered/2>>0)*previewHeight;
+                this.previewsHeight = (this.previewPicturesRendered/2>>0)*this.model.previewHeight;
                 if(detailsMode) {
                     this.showDetails();
                 } else {
                     $(this.el).find('.previews').css({height: this.previewsHeight + 'px'});
                 }
                 this.renderedOnce = true;
+
+                if(app.is_admin) {
+                    $(this.el).find('.previews').sortable();
+                }
             },
             /*
              * Не спеша спролистаем превьюшки в альбоме-иконке.
@@ -214,41 +211,7 @@ define([
                 });
             },
             handleFilesAdd: function(e) {
-                var files = e.target.files;
-                var filesAddedCount = 0;
-
-                // Показать превьюшки.
-                for (var i = 0, f; f = files[i]; i++) {
-                    if (!f.type.match('image.*')) {
-                        continue;
-                    }
-                    filesAddedCount++;
-                    this.model.addFileToUpload(f);
-                    var reader = new FileReader();
-                    // - 1 т.к. fileId инкрементируется ПОСЛЕ использования в качестве индекса в ф-ии addFileToUpload
-                    reader.fileId = this.model.fileId - 1;
-                    reader.onload = (function(file, parentView, pictureModel, pictureView) {
-                        return function(e) {
-                            var model = new pictureModel({
-                                src: e.target.result,
-                                comment: file.name,
-                                fileId: this.fileId,
-                                albumModel: parentView.model,
-                                //не будет обработки src специфичной для картинок с сервера
-                                local: true,
-                                mode: 'upload-preview'
-                            });
-                            var view = new pictureView({
-                                model: model, 
-                                container: parentView.$('.uploaded-files'),
-                                parentView: parentView
-                            });
-                            parentView.model.toUploadFileViews[this.fileId] = view;
-                            view.render();
-                        };
-                    })(f, this, pictureModel, pictureView);
-                    reader.readAsDataURL(f);
-                }
+                var filesAddedCount = this.model.handleFilesAdd(e, this);
                 if(filesAddedCount > 0) {
                     this.$('.upload').removeClass('hide');
                 }
@@ -282,6 +245,16 @@ define([
                         }
                     });
                     var confirm = new confirmView({model: confirmData});
+                });
+            },
+            /**
+             * Сохраняет порядок изображений.
+             */
+            saveOrder: function() {
+                var ids = $(this.el).find('.previews').sortable('toArray', {attribute: 'item_id'});
+                $.post(URLS.saveOrder, {ids: ids}, function() {
+                    var ntf = new notification({modelAttrs: {text: 'Порядок изображений сохранен успешно.'}});
+                    ntf.render();
                 });
             }
         });
