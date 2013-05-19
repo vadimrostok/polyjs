@@ -43,7 +43,7 @@
         
         <link href="<?=Yii::app()->request->baseUrl ?>/app/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 
-        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/style/main.less?001" />
+        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/style/main.less?002" />
         <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
 
         <script data-main="<?=Yii::app()->request->baseUrl ?>/app/frontEnd" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
