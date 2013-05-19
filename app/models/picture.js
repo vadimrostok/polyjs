@@ -31,13 +31,13 @@ define([
                     this.set('prefix', '');
                     return 1;
                 }
+                //Выберем оптимальное разрешение!
                 var win_width = $(window).width();
                 var win_height = $(window).height();
                 var pic_max_side = (this.get('file_info').width > this.get('file_info').height)? 
                     this.get('file_info').width
                     : this.get('file_info').height;
                 var prefix = '200_';
-                //Выберем оптимальное разрешение!
                 if(win_width > 200 && pic_max_side > 200) {
                     if(pic_max_side < 1300) {
                         prefix = '';
@@ -54,10 +54,16 @@ define([
                 }
                 this.set('prefix', prefix);
             },
+            /*
+             * Актуально для домашнего компьютера, добавляет к адресам прставку, равную Yii::app()->baseUrl.
+             */
             fixModels: function() {
                 this.set('client_path', URLS['picBase'] + this.get('client_path'));
                 this.setSizes();
             },
+            /*  
+             * Событие "повешено" на вьюшку картинки, но логика находится в модели альбома. Передаем "сигнал".
+             */
             removeFromUploadFileFist: function() {
                 this.albumModel.removeToUploadFile(this.get('fileId'));
             }

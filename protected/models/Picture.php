@@ -24,10 +24,11 @@ class Picture extends CActiveRecord
     //Оригинальные ширина и высота изображения в формате JSON.
     public $file_info;
 
-    //Аттрубуты этой модели, которые нне будут автоматически редактироваться с клента через REST.
-    //Такая проблема возникает т.к. Backbone отправляет на сервер все поля модели, но некоторые автоматические 
-    //изменяются на клиенте - например дата created_at в другом формате.
+    //Аттрубуты этой модели, которые не будут автоматически редактироваться с клента через REST.
+    //Такая проблема возникает т.к. Backbone отправляет на сервер все поля модели, но некоторые автоматически 
+    //изменяются на клиенте - например дата created_at возвращается на сервер уже в другом формате.
     public $protected_from_client_attributes = array('client_path', 'created_at', 'file_info');
+    //Перечисленные тут поля будут превращаться из сторки в объекты after Find и наоборот в before Save.
     public $json_attributes = array('file_info');
 
     //Имя сохраненного файла.
@@ -84,7 +85,9 @@ class Picture extends CActiveRecord
                 }
                 $this->status_id = Statuses::OK;
             } else {
-                $this->file_info = CJSON::encode($this->file_info);
+                foreach($this->json_attributes as $field) {
+                    $this->$field = CJSON::encode($this->$field);
+                }
             }
             return true;
         } else {
@@ -113,12 +116,14 @@ class Picture extends CActiveRecord
     }
 
     protected function afterFind() {
-        $this->file_info = CJSON::decode($this->file_info);
+        foreach($this->json_attributes as $field) {
+            $this->$field = CJSON::decode($this->$field);
+        }
         parent::afterFind();
     }
     
     /**
-     * Изменяет разрешение(если парамтры разрешения ненулевые)
+     * Изменяет разрешение
      * и сохраняет в конечную директорию.
      */
     public function savePicturePreview($wSide, $hSide = false)
@@ -138,10 +143,10 @@ class Picture extends CActiveRecord
     public static function getPicturesByAlbumId($albumId = 0)
     {
         if($albumId > 0) {
-            $albums = self::model()->findAll('album_id=' . (int)$albumId);
+            $pictures = self::model()->findAll('album_id=' . (int)$albumId);
         } else {
-            $albums = self::model()->findAll();
+            $pictures = self::model()->findAll();
         }
-        return $albums;
+        return $pictures;
     }
 }

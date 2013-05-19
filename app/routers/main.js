@@ -10,7 +10,7 @@ define([
                 'init': 'init'
             },
             album: function(id) {
-                this.nothingWasRouted = true;
+                this.nothingWasRouted = false;
                 if(!(id && data && data.albums && data.albums.list)) {
                     return false;
                 }
@@ -26,7 +26,7 @@ define([
                 } else f();
             },
             picture: function(aid, pid) {
-                this.nothingWasRouted = true;
+                this.nothingWasRouted = false;
                 if(!(aid && pid && data && data.albums && data.albums.list)) {
                     return false;
                 }
@@ -47,7 +47,7 @@ define([
                 } else f();
             },
             init: function() {
-
+                //donothing
             }
         });
         return Workspace;

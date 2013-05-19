@@ -37,6 +37,8 @@ define([
                 });
             },
             save: function() {
+                //В шаблоне у всех полей есть аттрибут model-field
+                //по нему собираются данные в модель.
                 var that = this;
                 $(this.el).find('.model-field').each(function(index, element) {
                     that.model.set($(element).attr('field'), $(element).val());
@@ -50,6 +52,7 @@ define([
                         console.log(arguments)
                     }
                 });
+                //Обновим альбом.
                 if(this.albumView) {
                     this.albumView.render(false, true);
                 }

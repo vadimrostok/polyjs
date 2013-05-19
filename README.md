@@ -1,30 +1,6 @@
-polyjs
+Shepi.
 ======
 
-This is a polyjs.com's source.
+This is a shepi.poly-js.com's source.
 
-Readme driven development? Readme driven development.
-
-Проект позволяет
-
-    на фронте
-    
-        создавать альбомы
-        
-        загружать фото
-        
-        владельцам удалять и редактировать альбомы и фото
-        
-        всем просматривать фото
-        
-        всем комментировать фото
-        
-    в бекенде
-    
-        создавать альбомы
-        
-        загружать фото
-        
-        удалять и редактировать альбомы и фото
-        
-        редактировать комментарии
+Ppersonal pictures hosting, based on Yii & Backbone.js.

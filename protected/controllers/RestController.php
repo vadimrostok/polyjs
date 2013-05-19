@@ -1,16 +1,11 @@
 <?php
 
+// Путь к Rest = models.base.Rest
+
 class RestController extends Controller
 {
-    /**
-     * Key which has to be in HTTP USERNAME and PASSWORD headers 
-     */
-    Const APPLICATION_ID = 'FLKR';
 
-    /**
-     * Default response format
-     * either 'json' or 'xml'
-     */
+    const APPLICATION_ID = 'SHEPI';
     private $format = 'json';
     
     public function filters()
@@ -34,11 +29,7 @@ class RestController extends Controller
                 );
                 break;
             default:
-                $errText = sprintf('Mode list is not implemented for model %s', $model);
-                Rest::releseResponse(
-                    501, 
-                    CJSON::encode(array('errorText' => $errText))
-                );
+                $this->notImplementedResponse('list', $model);
         }
     }
 
@@ -53,11 +44,7 @@ class RestController extends Controller
                 $data = Rest::view(Picture::model()->findByPk($id));
                 break;
             default:
-                $errText = sprintf('Mode view is not implemented for model %s', $model);
-                Rest::releseResponse(
-                    501, 
-                    CJSON::encode(array('errorText' => $errText))
-                );
+                $this->notImplementedResponse('view', $model);
         }
     }
 
@@ -78,11 +65,7 @@ class RestController extends Controller
                     $data = Rest::create(new Picture(), $post_vars);
                     break;
                 default:
-                    $errText = sprintf('Mode create is not implemented for model %s', $model);
-                    Rest::releseResponse(
-                        501, 
-                        CJSON::encode(array('errorText' => $errText))
-                    );
+                    $this->notImplementedResponse('create', $model);
             }
         }
     }
@@ -100,11 +83,7 @@ class RestController extends Controller
                     $data = Rest::update(Picture::model()->findByPk($id), $put_vars);
                     break;
                 default:
-                    $errText = sprintf('Mode update is not implemented for model %s', $model);
-                    Rest::releseResponse(
-                        501, 
-                        CJSON::encode(array('errorText' => $errText))
-                    );
+                    $this->notImplementedResponse('update', $model);
             }
         }
     }
@@ -120,16 +99,14 @@ class RestController extends Controller
                     $data = Rest::delete(Picture::model()->findByPk($id));
                     break;
                 default:
-                    $errText = sprintf('Mode delete is not implemented for model %s', $model);
-                    Rest::releseResponse(
-                        501, 
-                        CJSON::encode(array('errorText' => $errText))
-                    );
+                    $this->notImplementedResponse('delete', $model);
             }
         }
     }
 
     public function checkPremission() {
+        // Возможно в будущем на фронте будет авторизация.
+        // Поэтому просто-залогиненый-юзер не обязательно админ.
         if(Yii::app()->user->isGuest || !Yii::app()->user->isAdmin()) {
             $errText = 'Authentication Required';
             Rest::releseResponse(
@@ -139,5 +116,13 @@ class RestController extends Controller
             return false;
         }
         return true;
+    }
+
+    private function notImplementedResponse($modeID, $modelID) {
+        $errText = sprintf('Mode %s is not implemented for model %s', $modeID, $modelID);
+        Rest::releseResponse(
+            501, 
+            CJSON::encode(array('errorText' => $errText))
+        );
     }
 }

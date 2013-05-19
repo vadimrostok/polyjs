@@ -11,6 +11,7 @@ var data = {
         //views[album_id][picture_id] == needed view
         views: {}
     },
+    //Оповещения, которые появляются в правом верхнем углу экрана.
     notifications: {}
 };
 
@@ -37,6 +38,9 @@ requirejs.config({
         bootstrap: {
             deps: ['jquery']
         },
+        jqueryui: {
+            deps: ['jquery']
+        },
         underscore: {
             exports: '_'
         }
@@ -49,7 +53,9 @@ progressBar(20);
  * Я использовал название boilerplate, тогда я не правильно понял его значение.
  * Время прошло, название boilerplate осталось.
  * Смысл его в том, что в том модуле собраны jQuery, Backbone и Underscore, 
- * которые используются в каждом другом модуле.
+ * которые используются в каждом другом модуле. Подключая boilerplate подключается
+ * эта тройка(все 3 инциируют объекты в глобальном объекте).
+ * Не лучшая практика, в след. раз исправлюсь.
  */
 require([
         'boilerplate',
@@ -65,7 +71,7 @@ require([
         appView = new appView();
 
         var app = new (function() {
-            var debug = true;
+            var debug = false;
             this.log = function(obj) {
                 if(debug) {
                     console.log(obj);
@@ -100,6 +106,7 @@ require([
         //изменения в url будут вносится без хэша(#)
         Backbone.history.start({pushState: true, root: URLS.root});
 
+        //Если нет ничего в GET, то переходим на init для "чистоты"
         if(window.mainRouter.nothingWasRouted) {
         	window.mainRouter.navigate('init');
         }

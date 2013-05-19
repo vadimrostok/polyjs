@@ -2,9 +2,11 @@ define([
         'boilerplate',
         'collections/albums',
         'views/album/album',
-        'libs/require/text!templates/front/expose.html'
+        'libs/require/text!templates/front/expose.html',
+        'views/common/gallery', 
+        'jqueryui'
     ], 
-    function(boilerplate, AlbumsList, albumView, exposeTmp){
+    function(boilerplate, AlbumsList, albumView, exposeTmp, galleryView){
         var expose = Backbone.View.extend({
             params: {},
             id: 'expose',
@@ -36,7 +38,7 @@ define([
                 this.renderAlbums();
                 
                 progressBar(100);
-
+                //Прячем прогрессбар.
                 setTimeout(function() {
                     $('#mainProgressBar').parent().parent().addClass('hide');
                     $(that.el).removeClass('hide');

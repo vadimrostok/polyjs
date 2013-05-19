@@ -4,6 +4,7 @@ define([
     ], 
     function(boilerplate, PicturesList) {
         var AlbumModel = Backbone.Model.extend({
+            //просто счетчик
             fileId: 0,
             toUploadFilesList: {},
             toUploadFileViews: {},
@@ -31,8 +32,6 @@ define([
             },
             addFileToUpload: function(file) {
                 this.toUploadFilesList[this.fileId++] = file;
-                app.toUploadFilesList = this.toUploadFilesList;
-                app.toUploadFileViews = this.toUploadFileViews;
             },
             removeToUploadFile: function(fileId) {
                 delete this.toUploadFilesList[fileId];
@@ -48,6 +47,7 @@ define([
                     }
                     var file = this.toUploadFilesList[i];
 
+                    //Очень удобный объект, мало распространен, но нужен только в админке.
                     var FD = new FormData();
                     FD.append('album_id', this.get('id'));
                     FD.append('pictures[]', file);
@@ -55,12 +55,13 @@ define([
                     var xhr = new XMLHttpRequest();
                     xhr.tmpFileId = i;
 
-                    xhr.upload.addEventListener('progress', function(e) {
+                    //пока не нужно
+                    /*xhr.upload.addEventListener('progress', function(e) {
                         if (e.lengthComputable) {
                             var progress = (e.loaded * 100) / e.total;
-                            //console.log(progress);
+                            console.log(progress);
                         }
-                    }, false);
+                    }, false);*/
 
                     xhr.onreadystatechange = function () {
                         if (this.readyState == 4) {
@@ -78,6 +79,9 @@ define([
                     xhr.send(FD);
                 }
             },
+            /*
+             * Делает эту модель обложкой альбома.
+             */
             toggleMainPicture: function(id) {
                 var currentMainPicture = this.get('main_picture_id');
                 var successChangeMassage = '';
