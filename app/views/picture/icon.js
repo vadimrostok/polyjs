@@ -45,6 +45,7 @@ define([
                     this.model.set('icon_prefix', '');
                     $(this.el).addClass('local_preview');
                 }
+                $(this.el).attr('item_id', this.model.get('id'));
                 $(this.el).html(_.template(pictureTmp, this.model.toJSON()));
                 this.container.append(this.el);
             },

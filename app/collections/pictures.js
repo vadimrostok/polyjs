@@ -6,7 +6,11 @@ define([
         var PicturesList = Backbone.Collection.extend({
             model: Picture,
             comparator: function(el) {
-                return el.get('id')*(-1)
+                if(el.get('position') > 0) {
+                    return el.get('position');
+                } else {
+                    return el.get('id');
+                }
             }
         });
 
