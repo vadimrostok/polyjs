@@ -43,7 +43,7 @@
         
         <link href="<?=Yii::app()->request->baseUrl ?>/app/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 
-        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/style/main.less?002" />
+        <link rel="stylesheet/less" type="text/css" href="<?=Yii::app()->request->baseUrl ?>/app/style/main.less?003" />
         <script src="<?=Yii::app()->request->baseUrl ?>/app/libs/less/less.js"></script>
 
         <script data-main="<?=Yii::app()->request->baseUrl ?>/app/frontEnd" src="<?=Yii::app()->request->baseUrl ?>/app/libs/require/require.js"></script>
@@ -87,6 +87,7 @@
             </div>
             <?php echo $content; ?>
         </div>
+        <!-- Вместе с эпохой высокоскоростного интернета пришли новые стандарты качества. -->
         <div class="container footer">
             <h2>2013</h2>
             <h2 style="display: inline;">✎</h2> to <a href="mailto:vadimrostok@gmail.com">vadimrostok@gmail.com</a>
