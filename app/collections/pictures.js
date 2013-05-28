@@ -7,7 +7,7 @@ define([
             model: Picture,
             comparator: function(el) {
                 if(el.get('position') > 0) {
-                    return el.get('position');
+                    return parseInt(el.get('position'));
                 } else {
                     return el.get('id');
                 }
