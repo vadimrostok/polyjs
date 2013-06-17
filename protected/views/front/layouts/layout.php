@@ -79,11 +79,25 @@
     <body>
         <div class="container" id="page">
             <div class="loading">
-                <h1>Загрузка ♫♪</h1>
-                <h3>Подождите, пожалуйста, пока Я смахиваю пыль с альбомов.</h3>
-                <div class="progress progress-striped active">
-                    <div class="bar" id="mainProgressBar" style="width: 0%;"></div>
+                <div id="removeme">
+                    <h1>Rostok Vadim's pictures-hosting. Shepi. Вадим Росток.</h1>
+                    <p>
+                        Хостинг изображений, основанный на Yii и Backbone.js.
+                    </p>
                 </div>
+                <script>
+                //seo
+                document.write("" + 
+                "<h1>Загрузка ♫♪</h1>" +
+                "<h3>Подождите, пожалуйста, пока Я смахиваю пыль с альбомов.</h3>" +
+                "<div class=\"progress progress-striped active\">" +
+                "    <div class=\"bar\" id=\"mainProgressBar\" style=\"width: 0%;\"></div>" +
+                "</div>");
+                document.getElementById('removeme').remove();
+                if(!window.sessionStorage) {
+                    document.documentElement.innerHTML = '<html><body><h1>UPDATE YOUR BROWSER. IT\'S <?=date('Y'); ?> ALREADY!</h1></body></html>';
+                }
+                </script>
             </div>
             <?php echo $content; ?>
         </div>

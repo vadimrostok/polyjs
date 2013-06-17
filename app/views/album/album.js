@@ -20,10 +20,10 @@ define([
             useBigPreviews: null,
             sliderInterval: null,
             //Для альбома в виде иконки сколько рендерить првьюшек?
-            previewPicturesCount: 10,
-            //А сколько вышло? А то может быть в альбоме меньше 10-и картинок.
+            previewPicturesCount: 4,
+            //А сколько вышло? А то может быть в альбоме меньше 4-и картинок.
             previewPicturesRendered: 0,
-            //Выставляется после раскрытия альбома или если в альбоме меньше 10-и превьюшек.
+            //Выставляется после раскрытия альбома или если в альбоме меньше 4-и превьюшек.
             allPreviewPicturesRendered: false,
             renderedOnce: false,
             attributes: {
@@ -115,29 +115,38 @@ define([
             /*
              * Не спеша спролистаем превьюшки в альбоме-иконке.
              */
+            sliderAnimationUnComplete: 0,
             runSlider: function() {
                 var that = this;
                 var top, height, pictureHeight;
                 var viewPortHeight = 200;
                 //Эффект непредсказуемости.
-                if(Math.random() > 0.5) {
+                if(Math.random() > 0.5 || this.sliderAnimationUnComplete > 0) {
                     return true;
                 }
+                that.sliderAnimationUnComplete++;
+                
+                $(this.el).find('.previews').stop(true, true);
                 //Эффект непредсказуемости в квадрате.
                 setTimeout(function() {
-                    $(that.el).find('.previews').each(function(index, element) {
-                        if($(that).hasClass('albumDetails')) {
-                            return 1;
-                        }
-                        top = parseInt($(element).css('top')) || 0;
-                        pictureHeight = $(element).find('.picture').outerHeight();
-                        height = $(element).innerHeight();
-                        if(-top < height - viewPortHeight && height > $(element).parent().height()) {
-                            $(element).stop(true, true).animate({top: top - pictureHeight - 6 + 'px'}, 1000);
-                        } else {
-                            $(element).stop(true, true).animate({top: '0px'}, 1500);
-                        }
-                    });
+                    var element = $(that.el).find('.previews');
+                    top = parseInt($(element).css('top')) || 0;
+                    pictureHeight = $(element).find('.picture').outerHeight();
+                    height = $(element).innerHeight();
+
+                    if($(that).hasClass('albumDetails')) {
+                        return 1;
+                    }
+
+                    if(-top < height - viewPortHeight && height > $(element).parent().height()) {
+                        $(element).stop(true, true).animate({top: top - pictureHeight - 6 + 'px'}, 1000, function() {
+                            that.sliderAnimationUnComplete--;
+                        });
+                    } else {
+                        $(element).stop(true, true).animate({top: '0px'}, 1500, function() {
+                            that.sliderAnimationUnComplete--;
+                        });
+                    }
                 }, Math.random()*5000);
             },
             unsetSlider: function() {
