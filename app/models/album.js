@@ -11,6 +11,8 @@ define([
             previewHeight: 0,
             toUploadFilesList: {},
             toUploadFileViews: {},
+            //тут будут вьюшка и модель превьюшки
+            toUpload: {},
             urlRoot: URLS.base + '/rest/album',
             defaults: {
                 'title': ''
@@ -43,6 +45,7 @@ define([
                 this.toUploadFilesList = {};
             },
             handleFilesAdd: function(e, view) {
+                var that = this;
                 var files = e.target.files;
                 var filesAddedCount = 0;
 
@@ -74,6 +77,7 @@ define([
                             });
                             parentView.model.toUploadFileViews[this.fileId] = view;
                             view.render();
+                            that.toUpload[reader.fileId] = {m: model, v: view};
                         };
                     })(f, view, pictureModel, pictureView);
                     reader.readAsDataURL(f);
@@ -113,6 +117,8 @@ define([
                             }
                             that.toUploadFileViews[this.tmpFileId].remove();
                             that.removeToUploadFile(this.tmpFileId);
+                            delete that.toUpload.m;
+                            delete that.toUpload.v;
                         }
                     };
 
