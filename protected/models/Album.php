@@ -121,7 +121,6 @@ class Album extends CActiveRecord
         }
 
         foreach($albums as $key => $album) {
-            $albums[$key]['created_at'] = date('d.m.y', strtotime($albums[$key]['created_at']));
             $albums[$key]['pictures'] = isset($picturesByAlbumId[$album['id']])? 
                 $picturesByAlbumId[$album['id']]
                 : array();
